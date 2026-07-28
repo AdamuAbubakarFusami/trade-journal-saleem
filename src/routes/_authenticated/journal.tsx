@@ -40,7 +40,7 @@ export const Route = createFileRoute("/_authenticated/journal")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: Journal;
+  component: Journal,
 });
 
 function Journal() {
