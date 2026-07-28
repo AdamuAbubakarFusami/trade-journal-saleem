@@ -17,6 +17,7 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedPsychologyRouteImport } from './routes/_authenticated/psychology'
 import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticated/journal'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/coach'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -58,6 +59,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCoachRoute = AuthenticatedCoachRouteImport.update({
+  id: '/coach',
+  path: '/coach',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
+  '/coach': typeof AuthenticatedCoachRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/psychology': typeof AuthenticatedPsychologyRoute
@@ -79,6 +86,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
+  '/coach': typeof AuthenticatedCoachRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/psychology': typeof AuthenticatedPsychologyRoute
@@ -91,6 +99,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
+  '/_authenticated/coach': typeof AuthenticatedCoachRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/journal': typeof AuthenticatedJournalRoute
   '/_authenticated/psychology': typeof AuthenticatedPsychologyRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/analytics'
+    | '/coach'
     | '/dashboard'
     | '/journal'
     | '/psychology'
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/analytics'
+    | '/coach'
     | '/dashboard'
     | '/journal'
     | '/psychology'
@@ -124,6 +135,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/_authenticated/analytics'
+    | '/_authenticated/coach'
     | '/_authenticated/dashboard'
     | '/_authenticated/journal'
     | '/_authenticated/psychology'
@@ -195,6 +207,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/coach': {
+      id: '/_authenticated/coach'
+      path: '/coach'
+      fullPath: '/coach'
+      preLoaderRoute: typeof AuthenticatedCoachRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/analytics': {
       id: '/_authenticated/analytics'
       path: '/analytics'
@@ -207,6 +226,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
+  AuthenticatedCoachRoute: typeof AuthenticatedCoachRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedJournalRoute: typeof AuthenticatedJournalRoute
   AuthenticatedPsychologyRoute: typeof AuthenticatedPsychologyRoute
@@ -215,6 +235,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
+  AuthenticatedCoachRoute: AuthenticatedCoachRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedJournalRoute: AuthenticatedJournalRoute,
   AuthenticatedPsychologyRoute: AuthenticatedPsychologyRoute,
@@ -233,3 +254,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
