@@ -112,6 +112,12 @@ function Journal() {
       }
     >
       <TradeDialog open={dialogOpen} onOpenChange={setDialogOpen} trade={editing} />
+      <TradeAnalysisDialog
+        trade={analyzing}
+        trades={trades ?? []}
+        open={!!analyzing}
+        onOpenChange={(v) => !v && setAnalyzing(null)}
+      />
 
       <div className="surface-card mb-4 flex flex-col gap-3 p-4 sm:flex-row">
         <div className="relative flex-1">
