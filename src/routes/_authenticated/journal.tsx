@@ -214,6 +214,14 @@ function Journal() {
                         <Button
                           size="icon"
                           variant="ghost"
+                          aria-label="Analyze trade with AI"
+                          onClick={() => setAnalyzing(t)}
+                        >
+                          <Sparkles className="h-4 w-4 text-primary" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="ghost"
                           aria-label="Edit trade"
                           onClick={() => {
                             setEditing(t);
