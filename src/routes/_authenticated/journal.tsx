@@ -53,6 +53,7 @@ function Journal() {
   const [editing, setEditing] = useState<Trade | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [analyzing, setAnalyzing] = useState<Trade | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
