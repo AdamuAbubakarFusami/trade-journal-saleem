@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Download, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { Download, Pencil, Plus, Search, Sparkles, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/app-shell";
 import { TradeDialog } from "@/components/trade-dialog";
+import { TradeAnalysisDialog } from "@/components/trade-analysis-dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,6 +53,7 @@ function Journal() {
   const [editing, setEditing] = useState<Trade | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [analyzing, setAnalyzing] = useState<Trade | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -110,6 +112,12 @@ function Journal() {
       }
     >
       <TradeDialog open={dialogOpen} onOpenChange={setDialogOpen} trade={editing} />
+      <TradeAnalysisDialog
+        trade={analyzing}
+        trades={trades ?? []}
+        open={!!analyzing}
+        onOpenChange={(v) => !v && setAnalyzing(null)}
+      />
 
       <div className="surface-card mb-4 flex flex-col gap-3 p-4 sm:flex-row">
         <div className="relative flex-1">
@@ -203,6 +211,14 @@ function Journal() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-1">
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          aria-label="Analyze trade with AI"
+                          onClick={() => setAnalyzing(t)}
+                        >
+                          <Sparkles className="h-4 w-4 text-primary" />
+                        </Button>
                         <Button
                           size="icon"
                           variant="ghost"
