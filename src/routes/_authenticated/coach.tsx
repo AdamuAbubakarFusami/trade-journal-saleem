@@ -9,17 +9,33 @@ import { AppShell } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DetectedList, GradePill, Section } from "@/components/analysis-blocks";
+import {
+  ConfidenceCard,
+  DetectedList,
+  EmptyState,
+  GradePill,
+  Section,
+} from "@/components/analysis-blocks";
 import { useTrades } from "@/hooks/use-trades";
 import { askCoach } from "@/lib/coach.functions";
-import { buildTraderProfile, generatePeriodReport } from "@/lib/ai-analysis.functions";
+import { buildTraderProfile, generatePeriodReport, runAnalyzer } from "@/lib/ai-analysis.functions";
 import {
+  analyzerContext,
   buildHistory,
   packContext,
+  periodContext,
   recentTrades,
   withinDays,
 } from "@/lib/analysis-context";
-import type { PeriodReport, TraderProfile } from "@/lib/analysis-types";
+import { quantMetrics } from "@/lib/quant";
+import {
+  ANALYZERS,
+  type AnalyzerKind,
+  type AnalyzerReport,
+  type PeriodKey,
+  type PeriodReport,
+  type TraderProfile,
+} from "@/lib/analysis-types";
 import { computeStats, groupBy } from "@/lib/trades";
 
 export const Route = createFileRoute("/_authenticated/coach")({
@@ -40,6 +56,14 @@ const PROMPTS = [
   "Design a one-week plan to improve my discipline.",
 ];
 
+const PERIODS: { key: PeriodKey; label: string; days: number }[] = [
+  { key: "daily", label: "Daily", days: 1 },
+  { key: "weekly", label: "Weekly", days: 7 },
+  { key: "monthly", label: "Monthly", days: 30 },
+  { key: "quarterly", label: "Quarterly", days: 90 },
+  { key: "yearly", label: "Yearly", days: 365 },
+];
+
 const avg = (v: number[]) => (v.length ? v.reduce((s, x) => s + x, 0) / v.length : 0);
 
 function Coach() {
@@ -48,8 +72,11 @@ function Coach() {
   const ask = useServerFn(askCoach);
   const runPeriod = useServerFn(generatePeriodReport);
   const runProfile = useServerFn(buildTraderProfile);
+  const runAnalyzerFn = useServerFn(runAnalyzer);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [period, setPeriod] = useState<PeriodKey>("weekly");
+  const [analyzer, setAnalyzer] = useState<AnalyzerKind>("strategy");
 
   const summary = useMemo(() => {
     const s = computeStats(list);
@@ -80,46 +107,31 @@ function Coach() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "The coach is unavailable"),
   });
 
-  const weekly = useMutation({
-    mutationFn: async () => {
-      const window = withinDays(list, 7);
-      const context = packContext({
-        period: "last 7 days",
-        periodStats: buildHistory(window),
-        previousPeriodStats: buildHistory(
-          withinDays(list, 14).filter((t) => !window.includes(t)),
-        ),
-        allTimeStats: buildHistory(list),
-        trades: recentTrades(window, 40),
-      });
-      return (await runPeriod({ data: { context, period: "weekly" } })) as PeriodReport;
+  const report = useMutation({
+    mutationFn: async (key: PeriodKey) => {
+      const spec = PERIODS.find((p) => p.key === key)!;
+      const window = withinDays(list, spec.days);
+      const previous = withinDays(list, spec.days * 2).filter((t) => !window.includes(t));
+      const context = periodContext(list, window, previous, `last ${spec.days} days`);
+      return (await runPeriod({ data: { context, period: key } })) as PeriodReport;
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Report failed"),
   });
 
-  const monthly = useMutation({
-    mutationFn: async () => {
-      const window = withinDays(list, 30);
-      const context = packContext({
-        period: "last 30 days",
-        periodStats: buildHistory(window),
-        previousPeriodStats: buildHistory(
-          withinDays(list, 60).filter((t) => !window.includes(t)),
-        ),
-        allTimeStats: buildHistory(list),
-        trades: recentTrades(window, 60),
-      });
-      return (await runPeriod({ data: { context, period: "monthly" } })) as PeriodReport;
-    },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "Report failed"),
+  const analyzerRun = useMutation({
+    mutationFn: async (kind: AnalyzerKind) =>
+      (await runAnalyzerFn({ data: { context: analyzerContext(list), kind } })) as AnalyzerReport,
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Analyzer failed"),
   });
 
   const profile = useMutation({
     mutationFn: async () => {
       const context = packContext({
         allTimeStats: buildHistory(list),
+        quant: quantMetrics(list),
         last30: buildHistory(withinDays(list, 30)),
         last90: buildHistory(withinDays(list, 90)),
+        monthlyGrowth: quantMetrics(list).monthlyGrowth,
         recent: recentTrades(list, 40),
       });
       return (await runProfile({ data: { context } })) as TraderProfile;
@@ -143,13 +155,21 @@ function Coach() {
     mutation.mutate(trimmed.slice(0, 500));
   }
 
+  if (!list.length) {
+    return (
+      <AppShell title="AI Coach" description="Coaching grounded in your own journal data">
+        <EmptyState />
+      </AppShell>
+    );
+  }
+
   return (
     <AppShell title="AI Coach" description="Coaching grounded in your own journal data">
       <Tabs defaultValue="ask">
-        <TabsList className="mb-4">
+        <TabsList className="mb-4 flex-wrap">
           <TabsTrigger value="ask">Ask coach</TabsTrigger>
-          <TabsTrigger value="weekly">Weekly report</TabsTrigger>
-          <TabsTrigger value="monthly">Monthly report</TabsTrigger>
+          <TabsTrigger value="reports">Reports</TabsTrigger>
+          <TabsTrigger value="analyzers">Analyzers</TabsTrigger>
           <TabsTrigger value="profile">Trader profile</TabsTrigger>
         </TabsList>
 
@@ -208,22 +228,101 @@ function Coach() {
           </div>
         </TabsContent>
 
-        <TabsContent value="weekly">
-          <ReportPanel
-            title="Weekly report"
-            blurb="Last 7 days: best and worst strategies and sessions, top mistake, psychology trend and an overall grade."
-            state={weekly}
-            onRun={() => guard() && weekly.mutate()}
-          />
+        <TabsContent value="reports">
+          <div className="surface-card space-y-4 p-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap gap-2">
+                {PERIODS.map((p) => (
+                  <Button
+                    key={p.key}
+                    size="sm"
+                    variant={period === p.key ? "default" : "outline"}
+                    onClick={() => {
+                      setPeriod(p.key);
+                      report.reset();
+                    }}
+                  >
+                    {p.label}
+                  </Button>
+                ))}
+              </div>
+              <Button onClick={() => guard() && report.mutate(period)} disabled={report.isPending}>
+                {report.isPending ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Sparkles className="mr-2 h-4 w-4" />
+                )}
+                Generate
+              </Button>
+            </div>
+            <ReportView report={report.data} pending={report.isPending} />
+          </div>
         </TabsContent>
 
-        <TabsContent value="monthly">
-          <ReportPanel
-            title="Monthly report"
-            blurb="Last 30 days: profit, loss, expectancy, drawdown, consistency and improvement versus the prior month."
-            state={monthly}
-            onRun={() => guard() && monthly.mutate()}
-          />
+        <TabsContent value="analyzers">
+          <div className="grid gap-4 lg:grid-cols-[260px_1fr]">
+            <div className="surface-card space-y-2 p-4">
+              {ANALYZERS.map((a) => (
+                <button
+                  key={a.key}
+                  onClick={() => {
+                    setAnalyzer(a.key);
+                    analyzerRun.reset();
+                  }}
+                  className={`w-full rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
+                    analyzer === a.key
+                      ? "border-primary/50 bg-primary/10 text-foreground"
+                      : "border-border text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {a.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="surface-card space-y-4 p-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-sm font-semibold">
+                    {ANALYZERS.find((a) => a.key === analyzer)?.label}
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    {ANALYZERS.find((a) => a.key === analyzer)?.blurb}
+                  </p>
+                </div>
+                <Button
+                  onClick={() => guard() && analyzerRun.mutate(analyzer)}
+                  disabled={analyzerRun.isPending}
+                >
+                  {analyzerRun.isPending ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Sparkles className="mr-2 h-4 w-4" />
+                  )}
+                  Run analyzer
+                </Button>
+              </div>
+
+              {analyzerRun.isPending ? (
+                <p className="py-10 text-sm text-muted-foreground">Crunching your journal…</p>
+              ) : analyzerRun.data ? (
+                <div className="space-y-6 pt-2 animate-in fade-in duration-300">
+                  {analyzerRun.data.insufficientData ? <EmptyState /> : null}
+                  <p className="text-lg font-semibold text-gradient">
+                    {analyzerRun.data.headline}
+                  </p>
+                  <p className="text-sm leading-relaxed">{analyzerRun.data.summary}</p>
+                  <ConfidenceCard confidence={analyzerRun.data.confidence} />
+                  <Section title="Findings">
+                    <DetectedList items={analyzerRun.data.findings} />
+                  </Section>
+                  <Section title="Recommendations">
+                    <DetectedList items={analyzerRun.data.recommendations} />
+                  </Section>
+                </div>
+              ) : null}
+            </div>
+          </div>
         </TabsContent>
 
         <TabsContent value="profile">
@@ -247,16 +346,13 @@ function Coach() {
             </div>
 
             {profile.data ? (
-              <div className="space-y-6 pt-2">
-                {profile.data.insufficientData ? (
-                  <p className="rounded-lg border border-border bg-muted/40 p-3 text-sm">
-                    Not enough trading data yet.
-                  </p>
-                ) : null}
+              <div className="space-y-6 pt-2 animate-in fade-in duration-300">
+                {profile.data.insufficientData ? <EmptyState /> : null}
                 <Section title="Archetype">
                   <p className="text-lg font-semibold text-gradient">{profile.data.archetype}</p>
                   <p className="text-sm text-muted-foreground">{profile.data.reason}</p>
                 </Section>
+                <ConfidenceCard confidence={profile.data.confidence} sampleSize={list.length} />
                 <Section title="Traits">
                   <DetectedList items={profile.data.traits} />
                 </Section>
@@ -275,88 +371,86 @@ function Coach() {
   );
 }
 
-function ReportPanel({
-  title,
-  blurb,
-  state,
-  onRun,
-}: {
-  title: string;
-  blurb: string;
-  state: { data?: PeriodReport; isPending: boolean };
-  onRun: () => void;
-}) {
-  const r = state.data;
+function ReportView({ report: r, pending }: { report?: PeriodReport; pending: boolean }) {
+  if (pending) return <p className="py-10 text-sm text-muted-foreground">Writing your report…</p>;
+  if (!r) return null;
   return (
-    <div className="surface-card space-y-4 p-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-sm font-semibold">{title}</h2>
-          <p className="text-sm text-muted-foreground">{blurb}</p>
-        </div>
-        <Button onClick={onRun} disabled={state.isPending}>
-          {state.isPending ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Sparkles className="mr-2 h-4 w-4" />
-          )}
-          Generate
-        </Button>
+    <div className="space-y-6 pt-2 animate-in fade-in duration-300">
+      {r.insufficientData ? <EmptyState /> : null}
+
+      <div className="flex flex-wrap items-center gap-3">
+        <GradePill label={r.overallGrade?.label} />
+        <span className="text-xs text-muted-foreground">{r.overallGrade?.reason}</span>
       </div>
 
-      {r ? (
-        <div className="space-y-6 pt-2">
-          {r.insufficientData ? (
-            <p className="rounded-lg border border-border bg-muted/40 p-3 text-sm">
-              Not enough trading data yet.
-            </p>
-          ) : null}
+      <Section title="Performance summary">
+        <p className="text-sm leading-relaxed">{r.summary}</p>
+      </Section>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <GradePill label={r.overallGrade?.label} />
-            <span className="text-xs text-muted-foreground">{r.overallGrade?.reason}</span>
-          </div>
-
-          <Section title="Summary">
-            <p className="text-sm leading-relaxed">{r.summary}</p>
-          </Section>
-
-          <Section title="Metrics">
-            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {(r.metrics ?? []).map((m, i) => (
-                <div key={`${m?.label}-${i}`} className="rounded-lg border border-border p-3">
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                    {m?.label}
-                  </p>
-                  <p className="num mt-1 text-sm font-medium">{m?.value}</p>
-                </div>
-              ))}
+      <Section title="Metrics">
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {(r.metrics ?? []).map((m, i) => (
+            <div key={`${m?.label}-${i}`} className="rounded-lg border border-border p-3">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">{m?.label}</p>
+              <p className="num mt-1 text-sm font-medium">{m?.value}</p>
             </div>
-          </Section>
-
-          <Section title="Highlights">
-            <DetectedList
-              items={[r.bestStrategy, r.bestSession].filter(Boolean) as never}
-              tone="good"
-            />
-          </Section>
-
-          <Section title="Weak points">
-            <DetectedList
-              items={[r.worstStrategy, r.worstSession, r.topMistake].filter(Boolean) as never}
-              tone="bad"
-            />
-          </Section>
-
-          <Section title="Psychology trend">
-            <p className="text-sm leading-relaxed">{r.psychologyTrend}</p>
-          </Section>
-
-          <Section title="Recommendations">
-            <DetectedList items={r.recommendations} />
-          </Section>
+          ))}
         </div>
+      </Section>
+
+      <ConfidenceCard confidence={r.confidence} />
+
+      <Section title="Biggest improvement">
+        <DetectedList
+          items={[r.biggestImprovement].filter(Boolean) as never}
+          tone="good"
+          empty="No measurable improvement in this period."
+        />
+      </Section>
+
+      <Section title="Biggest weakness">
+        <DetectedList
+          items={[r.biggestWeakness].filter(Boolean) as never}
+          tone="bad"
+          empty="No dominant weakness detected."
+        />
+      </Section>
+
+      <Section title="Highlights">
+        <DetectedList items={[r.bestStrategy, r.bestSession].filter(Boolean) as never} tone="good" />
+      </Section>
+
+      <Section title="Weak points">
+        <DetectedList
+          items={[r.worstStrategy, r.worstSession, r.topMistake].filter(Boolean) as never}
+          tone="bad"
+        />
+      </Section>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="rounded-lg border border-border p-3">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">Consistency score</p>
+          <p className="num mt-1 text-lg font-semibold">{r.consistencyScore ?? "—"}</p>
+        </div>
+        <div className="rounded-lg border border-border p-3">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">Discipline score</p>
+          <p className="num mt-1 text-lg font-semibold">{r.disciplineScore ?? "—"}</p>
+        </div>
+      </div>
+
+      <Section title="Psychology trend">
+        <p className="text-sm leading-relaxed">{r.psychologyTrend}</p>
+      </Section>
+
+      {r.riskTrend ? (
+        <Section title="Risk trend">
+          <p className="text-sm leading-relaxed">{r.riskTrend}</p>
+        </Section>
       ) : null}
+
+      <Section title="Personalized coaching">
+        <DetectedList items={r.recommendations} />
+      </Section>
     </div>
   );
 }
