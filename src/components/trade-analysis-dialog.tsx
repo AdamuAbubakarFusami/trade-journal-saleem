@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
@@ -12,9 +12,18 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { DetectedList, GradePill, ScoreBars, Section } from "@/components/analysis-blocks";
+import {
+  ConfidenceCard,
+  DetectedList,
+  EmptyState,
+  FlagList,
+  GradePill,
+  ScoreBars,
+  Section,
+} from "@/components/analysis-blocks";
 import { analyzeTrade } from "@/lib/ai-analysis.functions";
-import { buildHistory, packContext, recentTrades, serializeTrade } from "@/lib/analysis-context";
+import { tradeContext } from "@/lib/analysis-context";
+import { dataSufficiency, detectMistakes, detectStrengths } from "@/lib/rules-engine";
 import type { TradeAnalysis } from "@/lib/analysis-types";
 import type { Trade } from "@/lib/trades";
 
@@ -31,15 +40,18 @@ export function TradeAnalysisDialog({
 }) {
   const run = useServerFn(analyzeTrade);
 
+  const evidence = useMemo(() => {
+    if (!trade) return null;
+    return {
+      mistakes: detectMistakes(trade, trades),
+      strengths: detectStrengths(trade, trades),
+      sufficiency: dataSufficiency(trade, trades),
+    };
+  }, [trade, trades]);
+
   const mutation = useMutation({
-    mutationFn: async (target: Trade) => {
-      const context = packContext({
-        trade: serializeTrade(target),
-        history: buildHistory(trades),
-        recent: recentTrades(trades, 25),
-      });
-      return (await run({ data: { context } })) as TradeAnalysis;
-    },
+    mutationFn: async (target: Trade) =>
+      (await run({ data: { context: tradeContext(target, trades) } })) as TradeAnalysis,
     onError: (e) => toast.error(e instanceof Error ? e.message : "Analysis failed"),
   });
 
@@ -65,6 +77,17 @@ export function TradeAnalysisDialog({
           </DialogDescription>
         </DialogHeader>
 
+        {evidence ? (
+          <div className="space-y-3 rounded-xl border border-border bg-muted/20 p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Rule-based detection
+            </p>
+            <FlagList items={evidence.mistakes} tone="bad" />
+            <FlagList items={evidence.strengths} tone="good" />
+            <p className="text-xs text-muted-foreground">{evidence.sufficiency.reason}</p>
+          </div>
+        ) : null}
+
         {mutation.isPending ? (
           <div className="flex items-center gap-2 py-16 text-sm text-muted-foreground">
             <Loader2 className="h-4 w-4 animate-spin" /> Analysing execution, risk and psychology…
@@ -79,21 +102,19 @@ export function TradeAnalysisDialog({
             </Button>
           </div>
         ) : a ? (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-in fade-in duration-300">
             {a.insufficientData ? (
-              <p className="rounded-lg border border-border bg-muted/40 p-3 text-sm">
-                Not enough trading data yet — log more trades for higher-confidence coaching.
-              </p>
+              <EmptyState />
             ) : null}
 
             <div className="flex flex-wrap items-center gap-3">
               <GradePill label={a.grade?.label} />
-              {a.confidence ? (
-                <span className="text-xs text-muted-foreground">
-                  Confidence: {a.confidence.percent}% — {a.confidence.reason}
-                </span>
-              ) : null}
             </div>
+
+            <ConfidenceCard
+              confidence={a.confidence}
+              sampleSize={evidence?.sufficiency.sampleSize}
+            />
 
             <Section title="Trade summary">
               <p className="text-sm leading-relaxed">{a.summary}</p>
@@ -102,7 +123,7 @@ export function TradeAnalysisDialog({
               ) : null}
             </Section>
 
-            <Section title="Execution score">
+            <Section title="Execution scoring">
               <ScoreBars scores={a.executionScores} />
             </Section>
 
@@ -127,12 +148,26 @@ export function TradeAnalysisDialog({
               <DetectedList items={a.patterns} />
             </Section>
 
-            <Section title="Risk analysis">
+            <Section title="Risk evaluation">
               <p className="text-sm leading-relaxed">{a.riskAnalysis?.assessment}</p>
               <DetectedList items={a.riskAnalysis?.recommendations} />
             </Section>
 
-            <Section title="Psychology coach">
+            {a.capitalPreservation ? (
+              <Section title="Capital preservation">
+                <p className="text-sm leading-relaxed">{a.capitalPreservation.assessment}</p>
+                <DetectedList items={a.capitalPreservation.points} empty="" />
+              </Section>
+            ) : null}
+
+            {a.behavioral ? (
+              <Section title="Behavioral analysis">
+                <p className="text-sm leading-relaxed">{a.behavioral.assessment}</p>
+                <DetectedList items={a.behavioral.points} empty="" />
+              </Section>
+            ) : null}
+
+            <Section title="AI coach notes">
               <ul className="space-y-1">
                 {(a.psychologyCoach ?? []).map((m, i) => (
                   <li key={i} className="text-sm text-muted-foreground">
@@ -142,7 +177,7 @@ export function TradeAnalysisDialog({
               </ul>
             </Section>
 
-            <Section title="AI recommendations">
+            <Section title="Explainable recommendations">
               <DetectedList items={a.recommendations} />
             </Section>
 

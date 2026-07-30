@@ -1,3 +1,5 @@
+import { quantMetrics } from "./quant";
+import { dataSufficiency, detectMistakes, detectStrengths } from "./rules-engine";
 import { computeStats, groupBy, type Trade } from "./trades";
 
 const num = (v: unknown, d = 2) => {
@@ -145,4 +147,51 @@ export function withinDays(trades: Trade[], days: number) {
 export function packContext(payload: unknown) {
   const json = JSON.stringify(payload);
   return json.length > 60000 ? json.slice(0, 60000) : json;
+}
+
+/** Deterministic, model-free evidence bundled into every prompt. */
+export function buildEvidence(trade: Trade | null, trades: Trade[]) {
+  return {
+    quant: quantMetrics(trades),
+    detected: trade
+      ? {
+          mistakes: detectMistakes(trade, trades),
+          strengths: detectStrengths(trade, trades),
+        }
+      : null,
+    dataSufficiency: dataSufficiency(trade, trades),
+  };
+}
+
+export function tradeContext(trade: Trade, trades: Trade[]) {
+  return packContext({
+    trade: serializeTrade(trade),
+    history: buildHistory(trades),
+    recent: recentTrades(trades, 25),
+    ...buildEvidence(trade, trades),
+  });
+}
+
+export function periodContext(trades: Trade[], windowTrades: Trade[], previous: Trade[], label: string) {
+  return packContext({
+    period: label,
+    periodStats: buildHistory(windowTrades),
+    periodQuant: quantMetrics(windowTrades),
+    previousPeriodStats: buildHistory(previous),
+    previousPeriodQuant: quantMetrics(previous),
+    allTimeStats: buildHistory(trades),
+    dataSufficiency: dataSufficiency(null, windowTrades),
+    trades: recentTrades(windowTrades, 60),
+  });
+}
+
+export function analyzerContext(trades: Trade[]) {
+  return packContext({
+    allTimeStats: buildHistory(trades),
+    quant: quantMetrics(trades),
+    last30: buildHistory(withinDays(trades, 30)),
+    last90: buildHistory(withinDays(trades, 90)),
+    dataSufficiency: dataSufficiency(null, trades),
+    recent: recentTrades(trades, 40),
+  });
 }
