@@ -12,7 +12,9 @@ const StatsSchema = z.object({
     avgWin: z.number(),
     avgLoss: z.number(),
     streak: z.number(),
-    topStrategies: z.array(z.object({ name: z.string(), pnl: z.number(), winRate: z.number() })).max(8),
+    topStrategies: z
+      .array(z.object({ name: z.string(), pnl: z.number(), winRate: z.number() }))
+      .max(8),
     emotions: z.array(z.object({ name: z.string(), pnl: z.number(), winRate: z.number() })).max(8),
     avgDiscipline: z.number(),
     avgFear: z.number(),

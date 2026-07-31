@@ -75,17 +75,20 @@ export function detectMistakes(trade: Trade, history: Trade[]): Flag[] {
   if (emotion === "revenge")
     flags.push({
       title: "Revenge trading",
-      explanation: "You tagged this trade as revenge, meaning it followed a loss rather than a setup.",
+      explanation:
+        "You tagged this trade as revenge, meaning it followed a loss rather than a setup.",
     });
   if (emotion === "fomo")
     flags.push({
       title: "FOMO / late entry",
-      explanation: "Tagged as FOMO — entries chased after the move has started give worse RR by construction.",
+      explanation:
+        "Tagged as FOMO — entries chased after the move has started give worse RR by construction.",
     });
   if (emotion === "impatient")
     flags.push({
       title: "Forced trade",
-      explanation: "Tagged as impatient, which usually means the setup was taken before it completed.",
+      explanation:
+        "Tagged as impatient, which usually means the setup was taken before it completed.",
     });
   if (discipline !== null && discipline <= 4)
     flags.push({
@@ -126,7 +129,8 @@ export function detectMistakes(trade: Trade, history: Trade[]): Flag[] {
   )
     flags.push({
       title: "Missing journal data",
-      explanation: "Psychology fields are incomplete, which weakens every behavioural insight below.",
+      explanation:
+        "Psychology fields are incomplete, which weakens every behavioural insight below.",
     });
 
   const sameDay = history.filter((t) => t.opened_at.slice(0, 10) === trade.opened_at.slice(0, 10));
@@ -220,9 +224,7 @@ export function dataSufficiency(trade: Trade | null, history: Trade[]) {
   const filled = fields.filter((f) => f !== null && f !== undefined && f !== "").length;
   const completeness = fields.length ? Math.round((filled / fields.length) * 100) : 0;
   const sampleScore = Math.min(100, Math.round((sampleSize / 50) * 100));
-  const percent = trade
-    ? Math.round(sampleScore * 0.6 + completeness * 0.4)
-    : sampleScore;
+  const percent = trade ? Math.round(sampleScore * 0.6 + completeness * 0.4) : sampleScore;
   return {
     sampleSize,
     completeness,

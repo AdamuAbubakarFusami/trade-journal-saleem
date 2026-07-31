@@ -160,7 +160,11 @@ function Coach() {
     let cum = 0;
     return monthlyGrowth.map((m) => {
       cum += m.pnl;
-      return { name: m.name, equity: Number(cum.toFixed(2)), winRate: Number(m.winRate.toFixed(1)) };
+      return {
+        name: m.name,
+        equity: Number(cum.toFixed(2)),
+        winRate: Number(m.winRate.toFixed(1)),
+      };
     });
   }, [monthlyGrowth]);
 
@@ -175,12 +179,29 @@ function Coach() {
       subtitle: new Date().toLocaleString(),
       sections: [
         { heading: "Performance summary", body: r.summary },
-        { heading: "Overall grade", body: `${r.overallGrade?.label ?? "—"} — ${r.overallGrade?.reason ?? ""}` },
+        {
+          heading: "Overall grade",
+          body: `${r.overallGrade?.label ?? "—"} — ${r.overallGrade?.reason ?? ""}`,
+        },
         { heading: "Metrics", items: (r.metrics ?? []).map((m) => `${m?.label}: ${m?.value}`) },
-        { heading: "Biggest improvement", items: detectedText([r.biggestImprovement].filter(Boolean) as never) },
-        { heading: "Biggest weakness", items: detectedText([r.biggestWeakness].filter(Boolean) as never) },
-        { heading: "Highlights", items: detectedText([r.bestStrategy, r.bestSession].filter(Boolean) as never) },
-        { heading: "Weak points", items: detectedText([r.worstStrategy, r.worstSession, r.topMistake].filter(Boolean) as never) },
+        {
+          heading: "Biggest improvement",
+          items: detectedText([r.biggestImprovement].filter(Boolean) as never),
+        },
+        {
+          heading: "Biggest weakness",
+          items: detectedText([r.biggestWeakness].filter(Boolean) as never),
+        },
+        {
+          heading: "Highlights",
+          items: detectedText([r.bestStrategy, r.bestSession].filter(Boolean) as never),
+        },
+        {
+          heading: "Weak points",
+          items: detectedText(
+            [r.worstStrategy, r.worstSession, r.topMistake].filter(Boolean) as never,
+          ),
+        },
         { heading: "Recommendations", items: detectedText(r.recommendations) },
       ],
     });
@@ -376,9 +397,7 @@ function Coach() {
               ) : analyzerRun.data ? (
                 <div className="space-y-6 pt-2 animate-in fade-in duration-300">
                   {analyzerRun.data.insufficientData ? <EmptyState /> : null}
-                  <p className="text-lg font-semibold text-gradient">
-                    {analyzerRun.data.headline}
-                  </p>
+                  <p className="text-lg font-semibold text-gradient">{analyzerRun.data.headline}</p>
                   <p className="text-sm leading-relaxed">{analyzerRun.data.summary}</p>
                   <ConfidenceCard confidence={analyzerRun.data.confidence} />
                   <Section title="Findings">
@@ -468,9 +487,25 @@ function Coach() {
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={growthSeries}>
                         <CartesianGrid stroke="var(--color-border)" vertical={false} />
-                        <XAxis dataKey="name" stroke="var(--color-muted-foreground)" fontSize={11} />
-                        <YAxis yAxisId="l" stroke="var(--color-muted-foreground)" fontSize={11} width={56} />
-                        <YAxis yAxisId="r" orientation="right" domain={[0, 100]} stroke="var(--color-muted-foreground)" fontSize={11} width={40} />
+                        <XAxis
+                          dataKey="name"
+                          stroke="var(--color-muted-foreground)"
+                          fontSize={11}
+                        />
+                        <YAxis
+                          yAxisId="l"
+                          stroke="var(--color-muted-foreground)"
+                          fontSize={11}
+                          width={56}
+                        />
+                        <YAxis
+                          yAxisId="r"
+                          orientation="right"
+                          domain={[0, 100]}
+                          stroke="var(--color-muted-foreground)"
+                          fontSize={11}
+                          width={40}
+                        />
                         <Tooltip
                           contentStyle={{
                             background: "var(--color-popover)",
@@ -479,8 +514,22 @@ function Coach() {
                             color: "var(--color-foreground)",
                           }}
                         />
-                        <Line yAxisId="l" type="monotone" dataKey="equity" stroke="var(--color-primary)" strokeWidth={2} dot={false} />
-                        <Line yAxisId="r" type="monotone" dataKey="winRate" stroke="var(--color-chart-3)" strokeWidth={2} dot={false} />
+                        <Line
+                          yAxisId="l"
+                          type="monotone"
+                          dataKey="equity"
+                          stroke="var(--color-primary)"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                        <Line
+                          yAxisId="r"
+                          type="monotone"
+                          dataKey="winRate"
+                          stroke="var(--color-chart-3)"
+                          strokeWidth={2}
+                          dot={false}
+                        />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
@@ -503,7 +552,9 @@ function Coach() {
                             <span className="text-xs text-muted-foreground">
                               {r.trades} trades · {pct(r.winRate)}
                             </span>
-                            <span className={`num font-semibold ${r.pnl >= 0 ? "text-success" : "text-destructive"}`}>
+                            <span
+                              className={`num font-semibold ${r.pnl >= 0 ? "text-success" : "text-destructive"}`}
+                            >
                               {money(r.pnl)}
                             </span>
                           </li>
@@ -567,7 +618,10 @@ function ReportView({ report: r, pending }: { report?: PeriodReport; pending: bo
       </Section>
 
       <Section title="Highlights">
-        <DetectedList items={[r.bestStrategy, r.bestSession].filter(Boolean) as never} tone="good" />
+        <DetectedList
+          items={[r.bestStrategy, r.bestSession].filter(Boolean) as never}
+          tone="good"
+        />
       </Section>
 
       <Section title="Weak points">

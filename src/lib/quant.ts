@@ -137,11 +137,7 @@ function histogram(values: number[], edges: number[], labels: string[]) {
 
 export function riskDistribution(trades: Trade[]) {
   const values = trades.map((t) => Number(t.risk_percent)).filter(Number.isFinite);
-  return histogram(
-    values,
-    [0.5, 1, 2, 3, 5],
-    ["<0.5%", "0.5–1%", "1–2%", "2–3%", "3–5%", "5%+"],
-  );
+  return histogram(values, [0.5, 1, 2, 3, 5], ["<0.5%", "0.5–1%", "1–2%", "2–3%", "3–5%", "5%+"]);
 }
 
 export function rrDistribution(trades: Trade[]) {
@@ -151,9 +147,16 @@ export function rrDistribution(trades: Trade[]) {
 
 export function pnlDistribution(trades: Trade[]) {
   const wins = trades.map(pl).filter((v) => v > 0);
-  const losses = trades.map(pl).filter((v) => v < 0).map(Math.abs);
+  const losses = trades
+    .map(pl)
+    .filter((v) => v < 0)
+    .map(Math.abs);
   const bucket = (values: number[]) =>
-    histogram(values, [50, 100, 250, 500, 1000], ["<50", "50–100", "100–250", "250–500", "500–1k", "1k+"]);
+    histogram(
+      values,
+      [50, 100, 250, 500, 1000],
+      ["<50", "50–100", "100–250", "250–500", "500–1k", "1k+"],
+    );
   return { wins: bucket(wins), losses: bucket(losses) };
 }
 

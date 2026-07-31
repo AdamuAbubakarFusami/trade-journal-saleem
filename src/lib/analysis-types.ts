@@ -79,14 +79,46 @@ export type AnalyzerKind =
   | "habit";
 
 export const ANALYZERS: { key: AnalyzerKind; label: string; blurb: string }[] = [
-  { key: "strategy", label: "Strategy analyzer", blurb: "Which setups carry your edge and which drain it." },
-  { key: "session", label: "Session analyzer", blurb: "How Asia, London, New York and overlaps compare." },
-  { key: "emotion", label: "Emotion analyzer", blurb: "How each logged emotional state maps to results." },
-  { key: "risk", label: "Risk analyzer", blurb: "Risk sizing, drawdown, exposure and capital preservation." },
-  { key: "performance", label: "Performance analyzer", blurb: "Expectancy, profit factor, Sharpe and Sortino read." },
-  { key: "consistency", label: "Consistency analyzer", blurb: "How repeatable your process is across trades." },
-  { key: "discipline", label: "Discipline analyzer", blurb: "Rule-following versus deviation, with evidence." },
-  { key: "habit", label: "Habit analyzer", blurb: "Recurring behaviours by day, time and sequence." },
+  {
+    key: "strategy",
+    label: "Strategy analyzer",
+    blurb: "Which setups carry your edge and which drain it.",
+  },
+  {
+    key: "session",
+    label: "Session analyzer",
+    blurb: "How Asia, London, New York and overlaps compare.",
+  },
+  {
+    key: "emotion",
+    label: "Emotion analyzer",
+    blurb: "How each logged emotional state maps to results.",
+  },
+  {
+    key: "risk",
+    label: "Risk analyzer",
+    blurb: "Risk sizing, drawdown, exposure and capital preservation.",
+  },
+  {
+    key: "performance",
+    label: "Performance analyzer",
+    blurb: "Expectancy, profit factor, Sharpe and Sortino read.",
+  },
+  {
+    key: "consistency",
+    label: "Consistency analyzer",
+    blurb: "How repeatable your process is across trades.",
+  },
+  {
+    key: "discipline",
+    label: "Discipline analyzer",
+    blurb: "Rule-following versus deviation, with evidence.",
+  },
+  {
+    key: "habit",
+    label: "Habit analyzer",
+    blurb: "Recurring behaviours by day, time and sequence.",
+  },
 ];
 
 export const GRADES = ["A+", "A", "B", "C", "D", "F"] as const;

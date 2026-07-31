@@ -106,10 +106,18 @@ export function SaleemAiChat() {
               </span>
               <div>
                 <p className="text-sm font-semibold">Saleem AI</p>
-                <AiStatus active={mutation.isPending} label={mutation.isPending ? "Thinking…" : "Online"} />
+                <AiStatus
+                  active={mutation.isPending}
+                  label={mutation.isPending ? "Thinking…" : "Online"}
+                />
               </div>
             </div>
-            <Button size="icon" variant="ghost" aria-label="Close AI chat" onClick={() => setOpen(false)}>
+            <Button
+              size="icon"
+              variant="ghost"
+              aria-label="Close AI chat"
+              onClick={() => setOpen(false)}
+            >
               <X className="h-4 w-4" />
             </Button>
           </header>
@@ -135,13 +143,14 @@ export function SaleemAiChat() {
               </div>
             )}
             {messages.map((m, i) => (
-              <div key={i} className={cn("flex", m.role === "user" ? "justify-end" : "justify-start")}>
+              <div
+                key={i}
+                className={cn("flex", m.role === "user" ? "justify-end" : "justify-start")}
+              >
                 <div
                   className={cn(
                     "max-w-[85%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm leading-relaxed",
-                    m.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "text-foreground",
+                    m.role === "user" ? "bg-primary text-primary-foreground" : "text-foreground",
                   )}
                 >
                   {m.text}

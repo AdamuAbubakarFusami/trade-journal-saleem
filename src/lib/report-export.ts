@@ -5,8 +5,9 @@
 export type ReportSection = { heading: string; body?: string; items?: string[] };
 
 const escapeHtml = (s: string) =>
-  s.replace(/[&<>"']/g, (c) =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string,
+  s.replace(
+    /[&<>"']/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string,
   );
 
 export function exportReportPdf({

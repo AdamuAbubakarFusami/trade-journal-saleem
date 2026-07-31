@@ -70,7 +70,12 @@ export type AiScore = {
 
 export function aiScore(trades: Trade[]): AiScore {
   const breakdown: ScoreBreakdown[] = [
-    { key: "risk", label: "Risk", value: riskScore(trades), hint: "Stops, sizing, drawdown control" },
+    {
+      key: "risk",
+      label: "Risk",
+      value: riskScore(trades),
+      hint: "Stops, sizing, drawdown control",
+    },
     {
       key: "discipline",
       label: "Discipline",
@@ -162,7 +167,9 @@ export function dashboardWidgets(trades: Trade[]): Widget[] {
     {
       label: "Best strategy",
       value: strategies[0]?.name ?? "—",
-      hint: strategies[0] ? `${strategies[0].trades} trades · ${strategies[0].pnl >= 0 ? "+" : ""}${strategies[0].pnl}` : "No strategy logged",
+      hint: strategies[0]
+        ? `${strategies[0].trades} trades · ${strategies[0].pnl >= 0 ? "+" : ""}${strategies[0].pnl}`
+        : "No strategy logged",
       tone: strategies[0] && strategies[0].pnl > 0 ? "good" : "neutral",
     },
     {
@@ -177,19 +184,25 @@ export function dashboardWidgets(trades: Trade[]): Widget[] {
     {
       label: "Most profitable session",
       value: sessions[0]?.name ?? "—",
-      hint: sessions[0] ? `${sessions[0].trades} trades · win rate ${sessions[0].winRate.toFixed(0)}%` : "No sessions logged",
+      hint: sessions[0]
+        ? `${sessions[0].trades} trades · win rate ${sessions[0].winRate.toFixed(0)}%`
+        : "No sessions logged",
       tone: sessions[0] && sessions[0].pnl > 0 ? "good" : "neutral",
     },
     {
       label: "Most emotional state",
       value: mostEmotional?.name ?? "—",
-      hint: mostEmotional ? `${mostEmotional.trades} trades · ${mostEmotional.pnl}` : "No emotions logged",
+      hint: mostEmotional
+        ? `${mostEmotional.trades} trades · ${mostEmotional.pnl}`
+        : "No emotions logged",
       tone: mostEmotional && mostEmotional.pnl < 0 ? "bad" : "neutral",
     },
     {
       label: "Most common mistake",
       value: topMistake?.[0] ?? "None detected",
-      hint: topMistake ? `Flagged on ${topMistake[1]} trades` : "Rule engine found no repeated flags",
+      hint: topMistake
+        ? `Flagged on ${topMistake[1]} trades`
+        : "Rule engine found no repeated flags",
       tone: topMistake ? "bad" : "good",
     },
     trend("Consistency trend", "Second half vs first half", delta(consistencyScore)),

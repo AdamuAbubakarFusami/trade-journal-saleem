@@ -97,7 +97,12 @@ function CountBars({
       <BarChart data={data}>
         <CartesianGrid stroke="var(--color-border)" vertical={false} />
         <XAxis dataKey="label" stroke="var(--color-muted-foreground)" fontSize={11} />
-        <YAxis stroke="var(--color-muted-foreground)" fontSize={11} width={40} allowDecimals={false} />
+        <YAxis
+          stroke="var(--color-muted-foreground)"
+          fontSize={11}
+          width={40}
+          allowDecimals={false}
+        />
         <Tooltip cursor={{ fill: "var(--color-muted)" }} contentStyle={tooltipStyle} />
         <Bar dataKey="count" fill={color} radius={[6, 6, 0, 0]} />
       </BarChart>
@@ -221,7 +226,12 @@ function Analytics() {
             <LineChart data={winTrend}>
               <CartesianGrid stroke="var(--color-border)" vertical={false} />
               <XAxis dataKey="date" stroke="var(--color-muted-foreground)" fontSize={11} />
-              <YAxis domain={[0, 100]} stroke="var(--color-muted-foreground)" fontSize={11} width={40} />
+              <YAxis
+                domain={[0, 100]}
+                stroke="var(--color-muted-foreground)"
+                fontSize={11}
+                width={40}
+              />
               <Tooltip contentStyle={tooltipStyle} />
               <Line
                 type="monotone"
@@ -293,7 +303,12 @@ function Analytics() {
             <BarChart data={durations}>
               <CartesianGrid stroke="var(--color-border)" vertical={false} />
               <XAxis dataKey="label" stroke="var(--color-muted-foreground)" fontSize={11} />
-              <YAxis stroke="var(--color-muted-foreground)" fontSize={11} width={40} allowDecimals={false} />
+              <YAxis
+                stroke="var(--color-muted-foreground)"
+                fontSize={11}
+                width={40}
+                allowDecimals={false}
+              />
               <Tooltip cursor={{ fill: "var(--color-muted)" }} contentStyle={tooltipStyle} />
               <Bar dataKey="count" radius={[6, 6, 0, 0]} fill="var(--color-chart-3)" />
             </BarChart>

@@ -2,12 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 import { ANALYZER_BRIEFS, SYSTEM_PROMPTS, callGateway } from "./ai-engine.server";
-import type {
-  AnalyzerReport,
-  PeriodReport,
-  TradeAnalysis,
-  TraderProfile,
-} from "./analysis-types";
+import type { AnalyzerReport, PeriodReport, TradeAnalysis, TraderProfile } from "./analysis-types";
 
 const ContextSchema = z.object({
   context: z.string().min(2).max(60000),

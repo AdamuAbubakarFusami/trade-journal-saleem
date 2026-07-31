@@ -98,12 +98,20 @@ export function TradeAnalysisDialog({
           heading: "Execution analysis",
           items: (a.executionScores ?? []).map((s) => `${s.name}: ${s.score}/10 — ${s.comment}`),
         },
-        { heading: "Psychology analysis", body: a.psychology?.assessment, items: detected(a.psychology?.factors) },
+        {
+          heading: "Psychology analysis",
+          body: a.psychology?.assessment,
+          items: detected(a.psychology?.factors),
+        },
         { heading: "Mistakes", items: detected(a.mistakes) },
         { heading: "Strengths", items: detected(a.strengths) },
         { heading: "Performance insights", items: detected(a.performanceInsights) },
         { heading: "Pattern recognition", items: detected(a.patterns) },
-        { heading: "Risk analysis", body: a.riskAnalysis?.assessment, items: detected(a.riskAnalysis?.recommendations) },
+        {
+          heading: "Risk analysis",
+          body: a.riskAnalysis?.assessment,
+          items: detected(a.riskAnalysis?.recommendations),
+        },
         { heading: "Recommendations", items: detected(a.recommendations) },
         {
           heading: "Confidence",
@@ -137,7 +145,10 @@ export function TradeAnalysisDialog({
             <Fact label="Entry" value={trade.entry_price ? String(trade.entry_price) : "—"} />
             <Fact label="Exit" value={trade.exit_price ? String(trade.exit_price) : "—"} />
             <Fact label="Stop loss" value={trade.stop_loss ? String(trade.stop_loss) : "none"} />
-            <Fact label="Position size" value={trade.position_size ? String(trade.position_size) : "—"} />
+            <Fact
+              label="Position size"
+              value={trade.position_size ? String(trade.position_size) : "—"}
+            />
             <Fact label="Result" value={money(Number(trade.profit_loss))} />
           </div>
         ) : null}
@@ -150,7 +161,9 @@ export function TradeAnalysisDialog({
               <div className="flex flex-wrap gap-2">
                 <AiChip>{risk === null ? "Risk not logged" : `Risk ${risk}%`}</AiChip>
                 <AiChip>{rr === null ? "RR not logged" : `${rr}R planned`}</AiChip>
-                <AiChip>{trade?.session ? `${trade.session} session` : "Session not logged"}</AiChip>
+                <AiChip>
+                  {trade?.session ? `${trade.session} session` : "Session not logged"}
+                </AiChip>
                 <AiChip>{trade?.emotional_state ?? "Emotion not logged"}</AiChip>
               </div>
               <p className="text-xs text-muted-foreground">{evidence.sufficiency.reason}</p>
@@ -209,7 +222,10 @@ export function TradeAnalysisDialog({
 
               <div className="space-y-4">
                 <AiCard title="Entry & exit analysis">
-                  <DetectedList items={a.performanceInsights} empty="No entry/exit insight returned." />
+                  <DetectedList
+                    items={a.performanceInsights}
+                    empty="No entry/exit insight returned."
+                  />
                 </AiCard>
                 <AiCard title="Risk & position size">
                   <p className="text-sm leading-relaxed">{a.riskAnalysis?.assessment}</p>

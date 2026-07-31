@@ -195,7 +195,10 @@ function Dashboard() {
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
               {widgets.map((w) => (
-                <div key={w.label} className="ai-surface p-4 transition-transform duration-200 hover:-translate-y-0.5">
+                <div
+                  key={w.label}
+                  className="ai-surface p-4 transition-transform duration-200 hover:-translate-y-0.5"
+                >
                   <p className="text-xs uppercase tracking-wide text-muted-foreground">{w.label}</p>
                   <p
                     className={cn(

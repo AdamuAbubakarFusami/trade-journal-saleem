@@ -3,7 +3,13 @@ import { BrainCircuit, Sparkles } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-export function AiBadge({ label = "Saleem AI", className }: { label?: string; className?: string }) {
+export function AiBadge({
+  label = "Saleem AI",
+  className,
+}: {
+  label?: string;
+  className?: string;
+}) {
   return (
     <span
       className={cn(
@@ -33,14 +39,25 @@ export function AiStatus({ active, label }: { active?: boolean; label: string })
 
 export function PoweredBy({ className }: { className?: string }) {
   return (
-    <span className={cn("inline-flex items-center gap-1.5 text-[11px] text-muted-foreground", className)}>
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 text-[11px] text-muted-foreground",
+        className,
+      )}
+    >
       <BrainCircuit className="h-3 w-3 text-primary" />
       Powered by Saleem AI
     </span>
   );
 }
 
-export function AiChip({ children, tone = "neutral" }: { children: ReactNode; tone?: "good" | "bad" | "neutral" }) {
+export function AiChip({
+  children,
+  tone = "neutral",
+}: {
+  children: ReactNode;
+  tone?: "good" | "bad" | "neutral";
+}) {
   return (
     <span
       className={cn(

@@ -62,7 +62,10 @@ function Psychology() {
       { trait: "Patience", value: avg(list.map((t) => Number(t.patience_level ?? 0))) },
       { trait: "Confidence", value: avg(list.map((t) => Number(t.confidence_level ?? 0))) },
       { trait: "Calm (inv. fear)", value: 10 - avg(list.map((t) => Number(t.fear_level ?? 0))) },
-      { trait: "Restraint (inv. greed)", value: 10 - avg(list.map((t) => Number(t.greed_level ?? 0))) },
+      {
+        trait: "Restraint (inv. greed)",
+        value: 10 - avg(list.map((t) => Number(t.greed_level ?? 0))),
+      },
     ].map((r) => ({ ...r, value: Number(r.value.toFixed(2)) }));
   }, [trades]);
 
@@ -119,7 +122,12 @@ function Psychology() {
     <AppShell title="Psychology" description="Your mental edge, measured">
       <section className="ai-hero mb-4 grid gap-6 p-6 lg:grid-cols-[auto_1fr]">
         <div className="flex items-center justify-center">
-          <RadialGauge value={psychology} size={150} label="Psychology AI Score" sublabel="out of 100" />
+          <RadialGauge
+            value={psychology}
+            size={150}
+            label="Psychology AI Score"
+            sublabel="out of 100"
+          />
         </div>
         <div className="space-y-3">
           <div className="flex flex-wrap items-center gap-3">
