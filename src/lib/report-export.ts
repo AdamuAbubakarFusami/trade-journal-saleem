@@ -63,7 +63,7 @@ export function exportReportPdf({
     Generated ${new Date().toLocaleString()} from your own journal data. Educational review only —
     no market predictions, signals or profit guarantees.
   </footer>
-  <script>window.onload = () => { window.print(); };<\/script>
+  <script>window.onload = () => { window.print(); };${"<"}/script>
 </body></html>`;
 
   const win = window.open("", "_blank", "width=900,height=1000");
