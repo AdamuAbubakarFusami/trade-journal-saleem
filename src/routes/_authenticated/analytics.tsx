@@ -22,7 +22,10 @@ import { AppShell } from "@/components/app-shell";
 import { EmptyState } from "@/components/analysis-blocks";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTrades } from "@/hooks/use-trades";
+import { CalendarHeatmap, HeatGrid } from "@/components/heatmaps";
+import { AiBadge, PoweredBy } from "@/components/ai-ui";
 import {
+  durationDistribution,
   drawdownCurve,
   growthByPeriod,
   pnlDistribution,
@@ -119,6 +122,21 @@ function Analytics() {
   const risks = useMemo(() => riskDistribution(list), [list]);
   const rrs = useMemo(() => rrDistribution(list), [list]);
   const pnls = useMemo(() => pnlDistribution(list), [list]);
+  const durations = useMemo(() => durationDistribution(list), [list]);
+  const dayMap = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const t of list) {
+      const key = new Date(t.opened_at).toISOString().slice(0, 10);
+      map.set(key, (map.get(key) ?? 0) + Number(t.profit_loss || 0));
+    }
+    return map;
+  }, [list]);
+  const toCells = (rows: { name: string; trades: number; pnl: number; winRate: number }[]) =>
+    rows.map((r) => ({ name: r.name, trades: r.trades, pnl: r.pnl, winRate: r.winRate }));
+  const strategyCells = useMemo(() => toCells(byStrategy), [byStrategy]);
+  const sessionCells = useMemo(() => toCells(bySession), [bySession]);
+  const emotionCells = useMemo(() => toCells(emotions), [emotions]);
+  const monthlyCells = useMemo(() => toCells(monthly), [monthly]);
 
   const winLoss = [
     { name: "Wins", value: stats.wins },
@@ -256,6 +274,32 @@ function Analytics() {
           <PnlBars data={emotions} />
         </Panel>
       </div>
+
+      <section className="mt-6 space-y-4">
+        <div className="flex flex-wrap items-center gap-3">
+          <h2 className="font-display text-base font-semibold">Heatmaps</h2>
+          <AiBadge label="AI analytics" />
+          <PoweredBy />
+        </div>
+        <CalendarHeatmap days={dayMap} />
+        <div className="grid gap-4 lg:grid-cols-2">
+          <HeatGrid title="Monthly heatmap" cells={monthlyCells} />
+          <HeatGrid title="Session heatmap" cells={sessionCells} />
+          <HeatGrid title="Strategy heatmap" cells={strategyCells} />
+          <HeatGrid title="Emotion heatmap" cells={emotionCells} />
+        </div>
+        <Panel title="Trade duration distribution">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={durations}>
+              <CartesianGrid stroke="var(--color-border)" vertical={false} />
+              <XAxis dataKey="label" stroke="var(--color-muted-foreground)" fontSize={11} />
+              <YAxis stroke="var(--color-muted-foreground)" fontSize={11} width={40} allowDecimals={false} />
+              <Tooltip cursor={{ fill: "var(--color-muted)" }} contentStyle={tooltipStyle} />
+              <Bar dataKey="count" radius={[6, 6, 0, 0]} fill="var(--color-chart-3)" />
+            </BarChart>
+          </ResponsiveContainer>
+        </Panel>
+      </section>
 
       <div className="surface-card mt-4 overflow-x-auto">
         <table className="w-full min-w-[640px] text-sm">

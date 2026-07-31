@@ -2,7 +2,16 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Loader2, Sparkles } from "lucide-react";
+import { Download, Loader2, Sparkles } from "lucide-react";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/app-shell";
@@ -27,7 +36,11 @@ import {
   recentTrades,
   withinDays,
 } from "@/lib/analysis-context";
-import { quantMetrics } from "@/lib/quant";
+import { growthByPeriod, quantMetrics } from "@/lib/quant";
+import { AiBadge, PoweredBy, ScoreRing } from "@/components/ai-ui";
+import { aiScore } from "@/lib/ai-score";
+import { exportReportPdf } from "@/lib/report-export";
+import { money, pct } from "@/lib/trades";
 import {
   ANALYZERS,
   type AnalyzerKind,
@@ -139,6 +152,55 @@ function Coach() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Profile failed"),
   });
 
+  const scores = useMemo(() => aiScore(list), [list]);
+  const monthlyGrowth = useMemo(() => growthByPeriod(list, "month"), [list]);
+  const quarterlyGrowth = useMemo(() => growthByPeriod(list, "quarter"), [list]);
+  const yearlyGrowth = useMemo(() => growthByPeriod(list, "year"), [list]);
+  const growthSeries = useMemo(() => {
+    let cum = 0;
+    return monthlyGrowth.map((m) => {
+      cum += m.pnl;
+      return { name: m.name, equity: Number(cum.toFixed(2)), winRate: Number(m.winRate.toFixed(1)) };
+    });
+  }, [monthlyGrowth]);
+
+  const detectedText = (items?: { title: string; explanation: string }[] | null) =>
+    (items ?? []).map((d) => `${d.title} — ${d.explanation}`);
+
+  function exportReport() {
+    const r = report.data;
+    if (!r) return;
+    exportReportPdf({
+      title: `Saleem AI ${period} report`,
+      subtitle: new Date().toLocaleString(),
+      sections: [
+        { heading: "Performance summary", body: r.summary },
+        { heading: "Overall grade", body: `${r.overallGrade?.label ?? "—"} — ${r.overallGrade?.reason ?? ""}` },
+        { heading: "Metrics", items: (r.metrics ?? []).map((m) => `${m?.label}: ${m?.value}`) },
+        { heading: "Biggest improvement", items: detectedText([r.biggestImprovement].filter(Boolean) as never) },
+        { heading: "Biggest weakness", items: detectedText([r.biggestWeakness].filter(Boolean) as never) },
+        { heading: "Highlights", items: detectedText([r.bestStrategy, r.bestSession].filter(Boolean) as never) },
+        { heading: "Weak points", items: detectedText([r.worstStrategy, r.worstSession, r.topMistake].filter(Boolean) as never) },
+        { heading: "Recommendations", items: detectedText(r.recommendations) },
+      ],
+    });
+  }
+
+  function exportProfile() {
+    const p = profile.data;
+    if (!p) return;
+    exportReportPdf({
+      title: "Saleem AI trader profile",
+      subtitle: `${p.archetype ?? ""} · ${new Date().toLocaleDateString()}`,
+      sections: [
+        { heading: "Archetype", body: `${p.archetype ?? ""} — ${p.reason ?? ""}` },
+        { heading: "Traits", items: detectedText(p.traits) },
+        { heading: "Long-term growth", items: detectedText(p.growth) },
+        { heading: "Focus next", items: detectedText(p.focusNext) },
+      ],
+    });
+  }
+
   function guard() {
     if (!list.length) {
       toast.error("Not enough trading data yet — log some trades first");
@@ -171,6 +233,7 @@ function Coach() {
           <TabsTrigger value="reports">Reports</TabsTrigger>
           <TabsTrigger value="analyzers">Analyzers</TabsTrigger>
           <TabsTrigger value="profile">Trader profile</TabsTrigger>
+          <TabsTrigger value="growth">Growth</TabsTrigger>
         </TabsList>
 
         <TabsContent value="ask">
@@ -254,6 +317,11 @@ function Coach() {
                 )}
                 Generate
               </Button>
+              {report.data ? (
+                <Button variant="outline" onClick={exportReport}>
+                  <Download className="mr-2 h-4 w-4" /> Export PDF
+                </Button>
+              ) : null}
             </div>
             <ReportView report={report.data} pending={report.isPending} />
           </div>
@@ -343,6 +411,11 @@ function Coach() {
                 )}
                 Build profile
               </Button>
+              {profile.data ? (
+                <Button variant="outline" onClick={exportProfile}>
+                  <Download className="mr-2 h-4 w-4" /> Export PDF
+                </Button>
+              ) : null}
             </div>
 
             {profile.data ? (
@@ -364,6 +437,83 @@ function Coach() {
                 </Section>
               </div>
             ) : null}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="growth">
+          <div className="space-y-4">
+            <div className="ai-hero space-y-4 p-6">
+              <div className="flex flex-wrap items-center gap-3">
+                <h2 className="font-display text-lg font-semibold">Long-term growth tracker</h2>
+                <AiBadge label="AI tracked" />
+                <PoweredBy />
+              </div>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
+                <ScoreRing value={scores.overall} label="Overall" />
+                {scores.breakdown.map((b) => (
+                  <ScoreRing key={b.key} value={b.value} label={b.label} />
+                ))}
+              </div>
+            </div>
+
+            {list.length === 0 ? (
+              <div className="surface-card p-12 text-center text-sm text-muted-foreground">
+                Not enough trading data yet.
+              </div>
+            ) : (
+              <>
+                <div className="surface-card p-5">
+                  <h3 className="text-sm font-semibold">Equity growth & win-rate journey</h3>
+                  <div className="mt-4 h-72">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={growthSeries}>
+                        <CartesianGrid stroke="var(--color-border)" vertical={false} />
+                        <XAxis dataKey="name" stroke="var(--color-muted-foreground)" fontSize={11} />
+                        <YAxis yAxisId="l" stroke="var(--color-muted-foreground)" fontSize={11} width={56} />
+                        <YAxis yAxisId="r" orientation="right" domain={[0, 100]} stroke="var(--color-muted-foreground)" fontSize={11} width={40} />
+                        <Tooltip
+                          contentStyle={{
+                            background: "var(--color-popover)",
+                            border: "1px solid var(--color-border)",
+                            borderRadius: 12,
+                            color: "var(--color-foreground)",
+                          }}
+                        />
+                        <Line yAxisId="l" type="monotone" dataKey="equity" stroke="var(--color-primary)" strokeWidth={2} dot={false} />
+                        <Line yAxisId="r" type="monotone" dataKey="winRate" stroke="var(--color-chart-3)" strokeWidth={2} dot={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                <div className="grid gap-4 lg:grid-cols-2">
+                  {[
+                    { title: "Quarterly progression", rows: quarterlyGrowth },
+                    { title: "Yearly progression", rows: yearlyGrowth },
+                  ].map((block) => (
+                    <div key={block.title} className="surface-card p-5">
+                      <h3 className="text-sm font-semibold">{block.title}</h3>
+                      <ul className="mt-3 space-y-2">
+                        {block.rows.map((r) => (
+                          <li
+                            key={r.name}
+                            className="flex items-center justify-between rounded-lg border border-border px-3 py-2 text-sm"
+                          >
+                            <span className="font-medium">{r.name}</span>
+                            <span className="text-xs text-muted-foreground">
+                              {r.trades} trades · {pct(r.winRate)}
+                            </span>
+                            <span className={`num font-semibold ${r.pnl >= 0 ? "text-success" : "text-destructive"}`}>
+                              {money(r.pnl)}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </TabsContent>
       </Tabs>

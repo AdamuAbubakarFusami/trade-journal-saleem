@@ -213,3 +213,16 @@ export function quantMetrics(trades: Trade[]) {
     emotionPerformance: emotionHeatmap(trades),
   };
 }
+
+/** Holding-time buckets in hours for the trade duration distribution chart. */
+export function durationDistribution(trades: Trade[]) {
+  const values = trades
+    .filter((t) => t.closed_at)
+    .map((t) => (new Date(t.closed_at!).getTime() - new Date(t.opened_at).getTime()) / 3600000)
+    .filter((h) => Number.isFinite(h) && h >= 0);
+  return histogram(
+    values,
+    [0.25, 1, 4, 24, 72],
+    ["<15m", "15m–1h", "1–4h", "4–24h", "1–3d", "3d+"],
+  );
+}

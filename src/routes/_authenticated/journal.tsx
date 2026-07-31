@@ -212,12 +212,14 @@ function Journal() {
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-1">
                         <Button
-                          size="icon"
-                          variant="ghost"
+                          size="sm"
+                          variant="outline"
+                          className="border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary"
                           aria-label="Analyze trade with AI"
                           onClick={() => setAnalyzing(t)}
                         >
-                          <Sparkles className="h-4 w-4 text-primary" />
+                          <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+                          Analyze with AI
                         </Button>
                         <Button
                           size="icon"

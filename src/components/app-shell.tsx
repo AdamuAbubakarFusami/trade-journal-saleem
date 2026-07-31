@@ -8,11 +8,13 @@ import {
   LogOut,
   Menu,
   NotebookPen,
+  Sparkles,
   Settings,
   X,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
+import { SaleemAiChat } from "@/components/saleem-ai-chat";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -21,6 +23,7 @@ const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/journal", label: "Journal", icon: NotebookPen },
   { to: "/analytics", label: "Analytics", icon: BarChart3 },
+  { to: "/coach", label: "AI Coach", icon: Sparkles },
   { to: "/psychology", label: "Psychology", icon: BrainCircuit },
   { to: "/settings", label: "Settings", icon: Settings },
 ] as const;
@@ -76,7 +79,10 @@ export function AppShell({
     <div className="flex min-h-screen w-full bg-background">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-sidebar-border bg-sidebar p-4 lg:flex">
         <Brand />
-        <div className="mt-8 flex-1">{nav}</div>
+        <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-primary">
+          <Sparkles className="h-3 w-3" /> Powered by Saleem AI
+        </p>
+        <div className="mt-6 flex-1">{nav}</div>
         <Button variant="ghost" className="justify-start gap-3" onClick={signOut}>
           <LogOut className="h-4 w-4" /> Sign out
         </Button>
@@ -121,6 +127,8 @@ export function AppShell({
         </header>
         <main className="flex-1 px-4 py-6 md:px-8 md:py-8">{children}</main>
       </div>
+
+      <SaleemAiChat />
     </div>
   );
 }
