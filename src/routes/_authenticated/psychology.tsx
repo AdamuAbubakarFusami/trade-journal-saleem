@@ -15,6 +15,9 @@ import {
 } from "recharts";
 
 import { AppShell } from "@/components/app-shell";
+import { AiBadge, Meter, PoweredBy, RadialGauge } from "@/components/ai-ui";
+import { psychMeters } from "@/lib/psych-metrics";
+import { aiScore } from "@/lib/ai-score";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTrades } from "@/hooks/use-trades";
@@ -59,7 +62,10 @@ function Psychology() {
       { trait: "Patience", value: avg(list.map((t) => Number(t.patience_level ?? 0))) },
       { trait: "Confidence", value: avg(list.map((t) => Number(t.confidence_level ?? 0))) },
       { trait: "Calm (inv. fear)", value: 10 - avg(list.map((t) => Number(t.fear_level ?? 0))) },
-      { trait: "Restraint (inv. greed)", value: 10 - avg(list.map((t) => Number(t.greed_level ?? 0))) },
+      {
+        trait: "Restraint (inv. greed)",
+        value: 10 - avg(list.map((t) => Number(t.greed_level ?? 0))),
+      },
     ].map((r) => ({ ...r, value: Number(r.value.toFixed(2)) }));
   }, [trades]);
 
@@ -72,6 +78,12 @@ function Psychology() {
         greed: Number(t.greed_level ?? 0),
       })),
     [sorted],
+  );
+
+  const meters = useMemo(() => psychMeters(trades ?? []), [trades]);
+  const psychology = useMemo(
+    () => aiScore(trades ?? []).breakdown.find((b) => b.key === "psychology")?.value ?? null,
+    [trades],
   );
 
   const byEmotion = useMemo(() => groupBy(trades ?? [], (t) => t.emotional_state), [trades]);
@@ -108,6 +120,29 @@ function Psychology() {
 
   return (
     <AppShell title="Psychology" description="Your mental edge, measured">
+      <section className="ai-hero mb-4 grid gap-6 p-6 lg:grid-cols-[auto_1fr]">
+        <div className="flex items-center justify-center">
+          <RadialGauge
+            value={psychology}
+            size={150}
+            label="Psychology AI Score"
+            sublabel="out of 100"
+          />
+        </div>
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <h2 className="font-display text-lg font-semibold">Mental edge meters</h2>
+            <AiBadge label="AI measured" />
+            <PoweredBy />
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {meters.map((m) => (
+              <Meter key={m.key} label={m.label} value={m.value} invert={m.invert} hint={m.hint} />
+            ))}
+          </div>
+        </div>
+      </section>
+
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="surface-card p-5">
           <h2 className="text-sm font-semibold">Trader profile</h2>

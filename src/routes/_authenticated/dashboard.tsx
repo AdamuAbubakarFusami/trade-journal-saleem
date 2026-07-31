@@ -12,6 +12,9 @@ import {
 } from "recharts";
 
 import { AppShell } from "@/components/app-shell";
+import { AiInsightPanel } from "@/components/ai-insight-panel";
+import { AiBadge, AiChip, PoweredBy, ScoreRing } from "@/components/ai-ui";
+import { aiScore, dashboardWidgets, periodScore } from "@/lib/ai-score";
 import { TradeDialog } from "@/components/trade-dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -121,6 +124,12 @@ function Dashboard() {
   const { data: trades, isLoading } = useTrades();
   const [open, setOpen] = useState(false);
   const stats = useMemo(() => computeStats(trades ?? []), [trades]);
+  const list = useMemo(() => trades ?? [], [trades]);
+  const score = useMemo(() => aiScore(list), [list]);
+  const today = useMemo(() => periodScore(list, 1), [list]);
+  const week = useMemo(() => periodScore(list, 7), [list]);
+  const month = useMemo(() => periodScore(list, 30), [list]);
+  const widgets = useMemo(() => dashboardWidgets(list), [list]);
 
   const days = useMemo(() => {
     const map = new Map<string, number>();
@@ -161,6 +170,51 @@ function Dashboard() {
         </div>
       ) : (
         <div className="space-y-6">
+          <AiInsightPanel trades={list} score={score.overall} />
+
+          <section className="space-y-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <h2 className="text-sm font-semibold">AI score system</h2>
+              <AiBadge label="AI scored" />
+              <PoweredBy />
+            </div>
+            <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 xl:grid-cols-5">
+              <ScoreRing value={today.score} label={`Today (${today.trades})`} />
+              <ScoreRing value={week.score} label={`This week (${week.trades})`} />
+              <ScoreRing value={month.score} label={`This month (${month.trades})`} />
+              {score.breakdown.map((b) => (
+                <ScoreRing key={b.key} value={b.value} label={b.label} />
+              ))}
+            </div>
+          </section>
+
+          <section className="space-y-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <h2 className="text-sm font-semibold">AI widgets</h2>
+              <AiChip>Evidence based</AiChip>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {widgets.map((w) => (
+                <div
+                  key={w.label}
+                  className="ai-surface p-4 transition-transform duration-200 hover:-translate-y-0.5"
+                >
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">{w.label}</p>
+                  <p
+                    className={cn(
+                      "mt-1.5 truncate text-base font-semibold capitalize",
+                      w.tone === "good" && "text-success",
+                      w.tone === "bad" && "text-destructive",
+                    )}
+                  >
+                    {w.value}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">{w.hint}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <Stat label="Total trades" value={String(stats.total)} />
             <Stat label="Win rate" value={pct(stats.winRate)} tone="up" />

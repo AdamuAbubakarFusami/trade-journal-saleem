@@ -1,13 +1,7 @@
 import type { Detected, ScoreItem } from "@/lib/analysis-types";
 import { cn } from "@/lib/utils";
 
-export function Section({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+export function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-2">
       <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -71,9 +65,7 @@ export function ScoreBars({ scores }: { scores?: ScoreItem[] | null }) {
                 style={{ width: `${value * 10}%` }}
               />
             </div>
-            {s?.comment ? (
-              <p className="mt-1 text-xs text-muted-foreground">{s.comment}</p>
-            ) : null}
+            {s?.comment ? <p className="mt-1 text-xs text-muted-foreground">{s.comment}</p> : null}
           </div>
         );
       })}
@@ -122,7 +114,12 @@ export function ConfidenceCard({
   confidence,
   sampleSize,
 }: {
-  confidence?: { percent?: number; reason?: string; dataSufficiency?: string; sampleSize?: number } | null;
+  confidence?: {
+    percent?: number;
+    reason?: string;
+    dataSufficiency?: string;
+    sampleSize?: number;
+  } | null;
   sampleSize?: number;
 }) {
   if (!confidence) return null;

@@ -63,8 +63,7 @@ function toLocalInput(value?: string | null) {
   return new Date(d.getTime() - off * 60000).toISOString().slice(0, 16);
 }
 
-const num = (v: string | number) =>
-  v === "" || v === null || v === undefined ? null : Number(v);
+const num = (v: string | number) => (v === "" || v === null || v === undefined ? null : Number(v));
 
 export function TradeDialog({
   open,
@@ -185,9 +184,7 @@ export function TradeDialog({
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>{trade ? "Edit trade" : "Log a trade"}</DialogTitle>
-          <DialogDescription>
-            Capture the execution and the mindset behind it.
-          </DialogDescription>
+          <DialogDescription>Capture the execution and the mindset behind it.</DialogDescription>
         </DialogHeader>
 
         <Tabs defaultValue="execution">

@@ -172,7 +172,12 @@ export function tradeContext(trade: Trade, trades: Trade[]) {
   });
 }
 
-export function periodContext(trades: Trade[], windowTrades: Trade[], previous: Trade[], label: string) {
+export function periodContext(
+  trades: Trade[],
+  windowTrades: Trade[],
+  previous: Trade[],
+  label: string,
+) {
   return packContext({
     period: label,
     periodStats: buildHistory(windowTrades),

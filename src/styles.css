@@ -191,3 +191,53 @@
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
+
+/* Glassmorphic AI surface with a gradient hairline border. */
+@utility ai-surface {
+  position: relative;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-surface) 88%, transparent) 0%,
+      color-mix(in oklab, var(--color-sidebar) 90%, transparent) 100%
+    );
+  backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in oklab, var(--color-primary) 14%, var(--color-border));
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+@utility ai-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+        900px 320px at 12% -30%,
+        color-mix(in oklab, var(--color-primary) 22%, transparent),
+        transparent
+      ),
+    var(--gradient-surface);
+  border: 1px solid color-mix(in oklab, var(--color-primary) 22%, var(--color-border));
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--glow-emerald);
+}
+
+@utility ai-pulse {
+  animation: ai-pulse-kf 2.4s ease-in-out infinite;
+}
+
+@keyframes ai-pulse-kf {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
