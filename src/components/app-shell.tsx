@@ -2,14 +2,21 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   BarChart3,
+  BarChart4,
   BrainCircuit,
+  Dices,
   LayoutDashboard,
   LineChart,
   LogOut,
   Menu,
+  Network,
   NotebookPen,
+  Percent,
+  Sigma,
   Sparkles,
   Settings,
+  TrendingDown,
+  TrendingUp,
   X,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
