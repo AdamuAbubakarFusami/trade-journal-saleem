@@ -2,14 +2,21 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   BarChart3,
+  BarChart4,
   BrainCircuit,
+  Dices,
   LayoutDashboard,
   LineChart,
   LogOut,
   Menu,
+  Network,
   NotebookPen,
+  Percent,
+  Sigma,
   Sparkles,
   Settings,
+  TrendingDown,
+  TrendingUp,
   X,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
@@ -27,6 +34,17 @@ const NAV = [
   { to: "/psychology", label: "Psychology", icon: BrainCircuit },
   { to: "/settings", label: "Settings", icon: Settings },
 ] as const;
+
+const INSTITUTIONAL = [
+  { to: "/quant-stats", label: "Quant Statistics", icon: Sigma },
+  { to: "/monte-carlo", label: "Monte Carlo", icon: Dices },
+  { to: "/probability", label: "Probability", icon: Percent },
+  { to: "/equity", label: "Equity", icon: TrendingUp },
+  { to: "/drawdown", label: "Drawdown", icon: TrendingDown },
+  { to: "/distribution", label: "Trade Distribution", icon: BarChart4 },
+  { to: "/correlations", label: "Correlations", icon: Network },
+] as const;
+
 
 export function AppShell({
   title,
@@ -72,8 +90,31 @@ export function AppShell({
           </Link>
         );
       })}
+      <p className="mt-5 px-3 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground/70">
+        Institutional Analytics
+      </p>
+      {INSTITUTIONAL.map((item) => {
+        const active = pathname.startsWith(item.to);
+        return (
+          <Link
+            key={item.to}
+            to={item.to}
+            onClick={() => setOpen(false)}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              active
+                ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-foreground",
+            )}
+          >
+            <item.icon className="h-4 w-4" />
+            {item.label}
+          </Link>
+        );
+      })}
     </nav>
   );
+
 
   return (
     <div className="flex min-h-screen w-full bg-background">
@@ -82,7 +123,7 @@ export function AppShell({
         <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-primary">
           <Sparkles className="h-3 w-3" /> Powered by Saleem AI
         </p>
-        <div className="mt-6 flex-1">{nav}</div>
+        <div className="mt-6 flex-1 overflow-y-auto">{nav}</div>
         <Button variant="ghost" className="justify-start gap-3" onClick={signOut}>
           <LogOut className="h-4 w-4" /> Sign out
         </Button>
@@ -98,7 +139,7 @@ export function AppShell({
                 <X className="h-4 w-4" />
               </Button>
             </div>
-            <div className="mt-8 flex-1">{nav}</div>
+            <div className="mt-8 flex-1 overflow-y-auto">{nav}</div>
             <Button variant="ghost" className="justify-start gap-3" onClick={signOut}>
               <LogOut className="h-4 w-4" /> Sign out
             </Button>

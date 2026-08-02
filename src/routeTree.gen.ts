@@ -14,9 +14,16 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedQuantStatsRouteImport } from './routes/_authenticated/quant-stats'
 import { Route as AuthenticatedPsychologyRouteImport } from './routes/_authenticated/psychology'
+import { Route as AuthenticatedProbabilityRouteImport } from './routes/_authenticated/probability'
+import { Route as AuthenticatedMonteCarloRouteImport } from './routes/_authenticated/monte-carlo'
 import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticated/journal'
+import { Route as AuthenticatedEquityRouteImport } from './routes/_authenticated/equity'
+import { Route as AuthenticatedDrawdownRouteImport } from './routes/_authenticated/drawdown'
+import { Route as AuthenticatedDistributionRouteImport } from './routes/_authenticated/distribution'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedCorrelationsRouteImport } from './routes/_authenticated/correlations'
 import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/coach'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 
@@ -44,9 +51,25 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedQuantStatsRoute = AuthenticatedQuantStatsRouteImport.update({
+  id: '/quant-stats',
+  path: '/quant-stats',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPsychologyRoute = AuthenticatedPsychologyRouteImport.update({
   id: '/psychology',
   path: '/psychology',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProbabilityRoute =
+  AuthenticatedProbabilityRouteImport.update({
+    id: '/probability',
+    path: '/probability',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMonteCarloRoute = AuthenticatedMonteCarloRouteImport.update({
+  id: '/monte-carlo',
+  path: '/monte-carlo',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedJournalRoute = AuthenticatedJournalRouteImport.update({
@@ -54,11 +77,33 @@ const AuthenticatedJournalRoute = AuthenticatedJournalRouteImport.update({
   path: '/journal',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedEquityRoute = AuthenticatedEquityRouteImport.update({
+  id: '/equity',
+  path: '/equity',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDrawdownRoute = AuthenticatedDrawdownRouteImport.update({
+  id: '/drawdown',
+  path: '/drawdown',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDistributionRoute =
+  AuthenticatedDistributionRouteImport.update({
+    id: '/distribution',
+    path: '/distribution',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCorrelationsRoute =
+  AuthenticatedCorrelationsRouteImport.update({
+    id: '/correlations',
+    path: '/correlations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedCoachRoute = AuthenticatedCoachRouteImport.update({
   id: '/coach',
   path: '/coach',
@@ -76,9 +121,16 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/coach': typeof AuthenticatedCoachRoute
+  '/correlations': typeof AuthenticatedCorrelationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/distribution': typeof AuthenticatedDistributionRoute
+  '/drawdown': typeof AuthenticatedDrawdownRoute
+  '/equity': typeof AuthenticatedEquityRoute
   '/journal': typeof AuthenticatedJournalRoute
+  '/monte-carlo': typeof AuthenticatedMonteCarloRoute
+  '/probability': typeof AuthenticatedProbabilityRoute
   '/psychology': typeof AuthenticatedPsychologyRoute
+  '/quant-stats': typeof AuthenticatedQuantStatsRoute
   '/settings': typeof AuthenticatedSettingsRoute
 }
 export interface FileRoutesByTo {
@@ -87,9 +139,16 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/coach': typeof AuthenticatedCoachRoute
+  '/correlations': typeof AuthenticatedCorrelationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/distribution': typeof AuthenticatedDistributionRoute
+  '/drawdown': typeof AuthenticatedDrawdownRoute
+  '/equity': typeof AuthenticatedEquityRoute
   '/journal': typeof AuthenticatedJournalRoute
+  '/monte-carlo': typeof AuthenticatedMonteCarloRoute
+  '/probability': typeof AuthenticatedProbabilityRoute
   '/psychology': typeof AuthenticatedPsychologyRoute
+  '/quant-stats': typeof AuthenticatedQuantStatsRoute
   '/settings': typeof AuthenticatedSettingsRoute
 }
 export interface FileRoutesById {
@@ -100,9 +159,16 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/coach': typeof AuthenticatedCoachRoute
+  '/_authenticated/correlations': typeof AuthenticatedCorrelationsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/distribution': typeof AuthenticatedDistributionRoute
+  '/_authenticated/drawdown': typeof AuthenticatedDrawdownRoute
+  '/_authenticated/equity': typeof AuthenticatedEquityRoute
   '/_authenticated/journal': typeof AuthenticatedJournalRoute
+  '/_authenticated/monte-carlo': typeof AuthenticatedMonteCarloRoute
+  '/_authenticated/probability': typeof AuthenticatedProbabilityRoute
   '/_authenticated/psychology': typeof AuthenticatedPsychologyRoute
+  '/_authenticated/quant-stats': typeof AuthenticatedQuantStatsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
 }
 export interface FileRouteTypes {
@@ -113,9 +179,16 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/analytics'
     | '/coach'
+    | '/correlations'
     | '/dashboard'
+    | '/distribution'
+    | '/drawdown'
+    | '/equity'
     | '/journal'
+    | '/monte-carlo'
+    | '/probability'
     | '/psychology'
+    | '/quant-stats'
     | '/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -124,9 +197,16 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/analytics'
     | '/coach'
+    | '/correlations'
     | '/dashboard'
+    | '/distribution'
+    | '/drawdown'
+    | '/equity'
     | '/journal'
+    | '/monte-carlo'
+    | '/probability'
     | '/psychology'
+    | '/quant-stats'
     | '/settings'
   id:
     | '__root__'
@@ -136,9 +216,16 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/analytics'
     | '/_authenticated/coach'
+    | '/_authenticated/correlations'
     | '/_authenticated/dashboard'
+    | '/_authenticated/distribution'
+    | '/_authenticated/drawdown'
+    | '/_authenticated/equity'
     | '/_authenticated/journal'
+    | '/_authenticated/monte-carlo'
+    | '/_authenticated/probability'
     | '/_authenticated/psychology'
+    | '/_authenticated/quant-stats'
     | '/_authenticated/settings'
   fileRoutesById: FileRoutesById
 }
@@ -186,11 +273,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/quant-stats': {
+      id: '/_authenticated/quant-stats'
+      path: '/quant-stats'
+      fullPath: '/quant-stats'
+      preLoaderRoute: typeof AuthenticatedQuantStatsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/psychology': {
       id: '/_authenticated/psychology'
       path: '/psychology'
       fullPath: '/psychology'
       preLoaderRoute: typeof AuthenticatedPsychologyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/probability': {
+      id: '/_authenticated/probability'
+      path: '/probability'
+      fullPath: '/probability'
+      preLoaderRoute: typeof AuthenticatedProbabilityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/monte-carlo': {
+      id: '/_authenticated/monte-carlo'
+      path: '/monte-carlo'
+      fullPath: '/monte-carlo'
+      preLoaderRoute: typeof AuthenticatedMonteCarloRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/journal': {
@@ -200,11 +308,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedJournalRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/equity': {
+      id: '/_authenticated/equity'
+      path: '/equity'
+      fullPath: '/equity'
+      preLoaderRoute: typeof AuthenticatedEquityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/drawdown': {
+      id: '/_authenticated/drawdown'
+      path: '/drawdown'
+      fullPath: '/drawdown'
+      preLoaderRoute: typeof AuthenticatedDrawdownRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/distribution': {
+      id: '/_authenticated/distribution'
+      path: '/distribution'
+      fullPath: '/distribution'
+      preLoaderRoute: typeof AuthenticatedDistributionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/correlations': {
+      id: '/_authenticated/correlations'
+      path: '/correlations'
+      fullPath: '/correlations'
+      preLoaderRoute: typeof AuthenticatedCorrelationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/coach': {
@@ -227,18 +363,32 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedCoachRoute: typeof AuthenticatedCoachRoute
+  AuthenticatedCorrelationsRoute: typeof AuthenticatedCorrelationsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDistributionRoute: typeof AuthenticatedDistributionRoute
+  AuthenticatedDrawdownRoute: typeof AuthenticatedDrawdownRoute
+  AuthenticatedEquityRoute: typeof AuthenticatedEquityRoute
   AuthenticatedJournalRoute: typeof AuthenticatedJournalRoute
+  AuthenticatedMonteCarloRoute: typeof AuthenticatedMonteCarloRoute
+  AuthenticatedProbabilityRoute: typeof AuthenticatedProbabilityRoute
   AuthenticatedPsychologyRoute: typeof AuthenticatedPsychologyRoute
+  AuthenticatedQuantStatsRoute: typeof AuthenticatedQuantStatsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedCoachRoute: AuthenticatedCoachRoute,
+  AuthenticatedCorrelationsRoute: AuthenticatedCorrelationsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDistributionRoute: AuthenticatedDistributionRoute,
+  AuthenticatedDrawdownRoute: AuthenticatedDrawdownRoute,
+  AuthenticatedEquityRoute: AuthenticatedEquityRoute,
   AuthenticatedJournalRoute: AuthenticatedJournalRoute,
+  AuthenticatedMonteCarloRoute: AuthenticatedMonteCarloRoute,
+  AuthenticatedProbabilityRoute: AuthenticatedProbabilityRoute,
   AuthenticatedPsychologyRoute: AuthenticatedPsychologyRoute,
+  AuthenticatedQuantStatsRoute: AuthenticatedQuantStatsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
 }
 
