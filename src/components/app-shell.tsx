@@ -90,8 +90,31 @@ export function AppShell({
           </Link>
         );
       })}
+      <p className="mt-5 px-3 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground/70">
+        Institutional Analytics
+      </p>
+      {INSTITUTIONAL.map((item) => {
+        const active = pathname.startsWith(item.to);
+        return (
+          <Link
+            key={item.to}
+            to={item.to}
+            onClick={() => setOpen(false)}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              active
+                ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-foreground",
+            )}
+          >
+            <item.icon className="h-4 w-4" />
+            {item.label}
+          </Link>
+        );
+      })}
     </nav>
   );
+
 
   return (
     <div className="flex min-h-screen w-full bg-background">
