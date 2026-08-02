@@ -123,7 +123,7 @@ export function AppShell({
         <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-primary">
           <Sparkles className="h-3 w-3" /> Powered by Saleem AI
         </p>
-        <div className="mt-6 flex-1">{nav}</div>
+        <div className="mt-6 flex-1 overflow-y-auto">{nav}</div>
         <Button variant="ghost" className="justify-start gap-3" onClick={signOut}>
           <LogOut className="h-4 w-4" /> Sign out
         </Button>
@@ -139,7 +139,7 @@ export function AppShell({
                 <X className="h-4 w-4" />
               </Button>
             </div>
-            <div className="mt-8 flex-1">{nav}</div>
+            <div className="mt-8 flex-1 overflow-y-auto">{nav}</div>
             <Button variant="ghost" className="justify-start gap-3" onClick={signOut}>
               <LogOut className="h-4 w-4" /> Sign out
             </Button>
