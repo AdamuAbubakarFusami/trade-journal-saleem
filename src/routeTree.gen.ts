@@ -23,6 +23,7 @@ import { Route as AuthenticatedEquityRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedDrawdownRouteImport } from './routes/_authenticated/drawdown'
 import { Route as AuthenticatedDistributionRouteImport } from './routes/_authenticated/distribution'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedCorrelationsRouteImport } from './routes/_authenticated/correlations'
 import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/coach'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 
@@ -97,6 +98,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCorrelationsRoute =
+  AuthenticatedCorrelationsRouteImport.update({
+    id: '/correlations',
+    path: '/correlations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedCoachRoute = AuthenticatedCoachRouteImport.update({
   id: '/coach',
   path: '/coach',
@@ -114,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/coach': typeof AuthenticatedCoachRoute
+  '/correlations': typeof AuthenticatedCorrelationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/distribution': typeof AuthenticatedDistributionRoute
   '/drawdown': typeof AuthenticatedDrawdownRoute
@@ -131,6 +139,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/coach': typeof AuthenticatedCoachRoute
+  '/correlations': typeof AuthenticatedCorrelationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/distribution': typeof AuthenticatedDistributionRoute
   '/drawdown': typeof AuthenticatedDrawdownRoute
@@ -150,6 +159,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/coach': typeof AuthenticatedCoachRoute
+  '/_authenticated/correlations': typeof AuthenticatedCorrelationsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/distribution': typeof AuthenticatedDistributionRoute
   '/_authenticated/drawdown': typeof AuthenticatedDrawdownRoute
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/analytics'
     | '/coach'
+    | '/correlations'
     | '/dashboard'
     | '/distribution'
     | '/drawdown'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/analytics'
     | '/coach'
+    | '/correlations'
     | '/dashboard'
     | '/distribution'
     | '/drawdown'
@@ -204,6 +216,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/analytics'
     | '/_authenticated/coach'
+    | '/_authenticated/correlations'
     | '/_authenticated/dashboard'
     | '/_authenticated/distribution'
     | '/_authenticated/drawdown'
@@ -323,6 +336,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/correlations': {
+      id: '/_authenticated/correlations'
+      path: '/correlations'
+      fullPath: '/correlations'
+      preLoaderRoute: typeof AuthenticatedCorrelationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/coach': {
       id: '/_authenticated/coach'
       path: '/coach'
@@ -343,6 +363,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedCoachRoute: typeof AuthenticatedCoachRoute
+  AuthenticatedCorrelationsRoute: typeof AuthenticatedCorrelationsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDistributionRoute: typeof AuthenticatedDistributionRoute
   AuthenticatedDrawdownRoute: typeof AuthenticatedDrawdownRoute
@@ -358,6 +379,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedCoachRoute: AuthenticatedCoachRoute,
+  AuthenticatedCorrelationsRoute: AuthenticatedCorrelationsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDistributionRoute: AuthenticatedDistributionRoute,
   AuthenticatedDrawdownRoute: AuthenticatedDrawdownRoute,

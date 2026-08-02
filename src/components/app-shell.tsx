@@ -28,6 +28,17 @@ const NAV = [
   { to: "/settings", label: "Settings", icon: Settings },
 ] as const;
 
+const INSTITUTIONAL = [
+  { to: "/quant-stats", label: "Quant Statistics", icon: Sigma },
+  { to: "/monte-carlo", label: "Monte Carlo", icon: Dices },
+  { to: "/probability", label: "Probability", icon: Percent },
+  { to: "/equity", label: "Equity", icon: TrendingUp },
+  { to: "/drawdown", label: "Drawdown", icon: TrendingDown },
+  { to: "/distribution", label: "Trade Distribution", icon: BarChart4 },
+  { to: "/correlations", label: "Correlations", icon: Network },
+] as const;
+
+
 export function AppShell({
   title,
   description,
