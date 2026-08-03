@@ -13,11 +13,19 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedTradeReplayRouteImport } from './routes/_authenticated/trade-replay'
+import { Route as AuthenticatedStrategyLabRouteImport } from './routes/_authenticated/strategy-lab'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedSessionIntelligenceRouteImport } from './routes/_authenticated/session-intelligence'
+import { Route as AuthenticatedRiskOfRuinRouteImport } from './routes/_authenticated/risk-of-ruin'
 import { Route as AuthenticatedQuantStatsRouteImport } from './routes/_authenticated/quant-stats'
 import { Route as AuthenticatedPsychologyRouteImport } from './routes/_authenticated/psychology'
 import { Route as AuthenticatedProbabilityRouteImport } from './routes/_authenticated/probability'
+import { Route as AuthenticatedPositionSizingRouteImport } from './routes/_authenticated/position-sizing'
+import { Route as AuthenticatedPortfolioRouteImport } from './routes/_authenticated/portfolio'
+import { Route as AuthenticatedPerformanceMetricsRouteImport } from './routes/_authenticated/performance-metrics'
 import { Route as AuthenticatedMonteCarloRouteImport } from './routes/_authenticated/monte-carlo'
+import { Route as AuthenticatedMarketIntelligenceRouteImport } from './routes/_authenticated/market-intelligence'
 import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticated/journal'
 import { Route as AuthenticatedEquityRouteImport } from './routes/_authenticated/equity'
 import { Route as AuthenticatedDrawdownRouteImport } from './routes/_authenticated/drawdown'
@@ -25,6 +33,8 @@ import { Route as AuthenticatedDistributionRouteImport } from './routes/_authent
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCorrelationsRouteImport } from './routes/_authenticated/correlations'
 import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/coach'
+import { Route as AuthenticatedBenchmarkRouteImport } from './routes/_authenticated/benchmark'
+import { Route as AuthenticatedBehaviorRouteImport } from './routes/_authenticated/behavior'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -46,9 +56,32 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedTradeReplayRoute =
+  AuthenticatedTradeReplayRouteImport.update({
+    id: '/trade-replay',
+    path: '/trade-replay',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedStrategyLabRoute =
+  AuthenticatedStrategyLabRouteImport.update({
+    id: '/strategy-lab',
+    path: '/strategy-lab',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSessionIntelligenceRoute =
+  AuthenticatedSessionIntelligenceRouteImport.update({
+    id: '/session-intelligence',
+    path: '/session-intelligence',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedRiskOfRuinRoute = AuthenticatedRiskOfRuinRouteImport.update({
+  id: '/risk-of-ruin',
+  path: '/risk-of-ruin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedQuantStatsRoute = AuthenticatedQuantStatsRouteImport.update({
@@ -67,11 +100,34 @@ const AuthenticatedProbabilityRoute =
     path: '/probability',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPositionSizingRoute =
+  AuthenticatedPositionSizingRouteImport.update({
+    id: '/position-sizing',
+    path: '/position-sizing',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPortfolioRoute = AuthenticatedPortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPerformanceMetricsRoute =
+  AuthenticatedPerformanceMetricsRouteImport.update({
+    id: '/performance-metrics',
+    path: '/performance-metrics',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedMonteCarloRoute = AuthenticatedMonteCarloRouteImport.update({
   id: '/monte-carlo',
   path: '/monte-carlo',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMarketIntelligenceRoute =
+  AuthenticatedMarketIntelligenceRouteImport.update({
+    id: '/market-intelligence',
+    path: '/market-intelligence',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedJournalRoute = AuthenticatedJournalRouteImport.update({
   id: '/journal',
   path: '/journal',
@@ -109,6 +165,16 @@ const AuthenticatedCoachRoute = AuthenticatedCoachRouteImport.update({
   path: '/coach',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedBenchmarkRoute = AuthenticatedBenchmarkRouteImport.update({
+  id: '/benchmark',
+  path: '/benchmark',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedBehaviorRoute = AuthenticatedBehaviorRouteImport.update({
+  id: '/behavior',
+  path: '/behavior',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
@@ -120,6 +186,8 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
+  '/behavior': typeof AuthenticatedBehaviorRoute
+  '/benchmark': typeof AuthenticatedBenchmarkRoute
   '/coach': typeof AuthenticatedCoachRoute
   '/correlations': typeof AuthenticatedCorrelationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -127,17 +195,27 @@ export interface FileRoutesByFullPath {
   '/drawdown': typeof AuthenticatedDrawdownRoute
   '/equity': typeof AuthenticatedEquityRoute
   '/journal': typeof AuthenticatedJournalRoute
+  '/market-intelligence': typeof AuthenticatedMarketIntelligenceRoute
   '/monte-carlo': typeof AuthenticatedMonteCarloRoute
+  '/performance-metrics': typeof AuthenticatedPerformanceMetricsRoute
+  '/portfolio': typeof AuthenticatedPortfolioRoute
+  '/position-sizing': typeof AuthenticatedPositionSizingRoute
   '/probability': typeof AuthenticatedProbabilityRoute
   '/psychology': typeof AuthenticatedPsychologyRoute
   '/quant-stats': typeof AuthenticatedQuantStatsRoute
+  '/risk-of-ruin': typeof AuthenticatedRiskOfRuinRoute
+  '/session-intelligence': typeof AuthenticatedSessionIntelligenceRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/strategy-lab': typeof AuthenticatedStrategyLabRoute
+  '/trade-replay': typeof AuthenticatedTradeReplayRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
+  '/behavior': typeof AuthenticatedBehaviorRoute
+  '/benchmark': typeof AuthenticatedBenchmarkRoute
   '/coach': typeof AuthenticatedCoachRoute
   '/correlations': typeof AuthenticatedCorrelationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -145,11 +223,19 @@ export interface FileRoutesByTo {
   '/drawdown': typeof AuthenticatedDrawdownRoute
   '/equity': typeof AuthenticatedEquityRoute
   '/journal': typeof AuthenticatedJournalRoute
+  '/market-intelligence': typeof AuthenticatedMarketIntelligenceRoute
   '/monte-carlo': typeof AuthenticatedMonteCarloRoute
+  '/performance-metrics': typeof AuthenticatedPerformanceMetricsRoute
+  '/portfolio': typeof AuthenticatedPortfolioRoute
+  '/position-sizing': typeof AuthenticatedPositionSizingRoute
   '/probability': typeof AuthenticatedProbabilityRoute
   '/psychology': typeof AuthenticatedPsychologyRoute
   '/quant-stats': typeof AuthenticatedQuantStatsRoute
+  '/risk-of-ruin': typeof AuthenticatedRiskOfRuinRoute
+  '/session-intelligence': typeof AuthenticatedSessionIntelligenceRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/strategy-lab': typeof AuthenticatedStrategyLabRoute
+  '/trade-replay': typeof AuthenticatedTradeReplayRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -158,6 +244,8 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
+  '/_authenticated/behavior': typeof AuthenticatedBehaviorRoute
+  '/_authenticated/benchmark': typeof AuthenticatedBenchmarkRoute
   '/_authenticated/coach': typeof AuthenticatedCoachRoute
   '/_authenticated/correlations': typeof AuthenticatedCorrelationsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -165,11 +253,19 @@ export interface FileRoutesById {
   '/_authenticated/drawdown': typeof AuthenticatedDrawdownRoute
   '/_authenticated/equity': typeof AuthenticatedEquityRoute
   '/_authenticated/journal': typeof AuthenticatedJournalRoute
+  '/_authenticated/market-intelligence': typeof AuthenticatedMarketIntelligenceRoute
   '/_authenticated/monte-carlo': typeof AuthenticatedMonteCarloRoute
+  '/_authenticated/performance-metrics': typeof AuthenticatedPerformanceMetricsRoute
+  '/_authenticated/portfolio': typeof AuthenticatedPortfolioRoute
+  '/_authenticated/position-sizing': typeof AuthenticatedPositionSizingRoute
   '/_authenticated/probability': typeof AuthenticatedProbabilityRoute
   '/_authenticated/psychology': typeof AuthenticatedPsychologyRoute
   '/_authenticated/quant-stats': typeof AuthenticatedQuantStatsRoute
+  '/_authenticated/risk-of-ruin': typeof AuthenticatedRiskOfRuinRoute
+  '/_authenticated/session-intelligence': typeof AuthenticatedSessionIntelligenceRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/strategy-lab': typeof AuthenticatedStrategyLabRoute
+  '/_authenticated/trade-replay': typeof AuthenticatedTradeReplayRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -178,6 +274,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/analytics'
+    | '/behavior'
+    | '/benchmark'
     | '/coach'
     | '/correlations'
     | '/dashboard'
@@ -185,17 +283,27 @@ export interface FileRouteTypes {
     | '/drawdown'
     | '/equity'
     | '/journal'
+    | '/market-intelligence'
     | '/monte-carlo'
+    | '/performance-metrics'
+    | '/portfolio'
+    | '/position-sizing'
     | '/probability'
     | '/psychology'
     | '/quant-stats'
+    | '/risk-of-ruin'
+    | '/session-intelligence'
     | '/settings'
+    | '/strategy-lab'
+    | '/trade-replay'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/reset-password'
     | '/analytics'
+    | '/behavior'
+    | '/benchmark'
     | '/coach'
     | '/correlations'
     | '/dashboard'
@@ -203,11 +311,19 @@ export interface FileRouteTypes {
     | '/drawdown'
     | '/equity'
     | '/journal'
+    | '/market-intelligence'
     | '/monte-carlo'
+    | '/performance-metrics'
+    | '/portfolio'
+    | '/position-sizing'
     | '/probability'
     | '/psychology'
     | '/quant-stats'
+    | '/risk-of-ruin'
+    | '/session-intelligence'
     | '/settings'
+    | '/strategy-lab'
+    | '/trade-replay'
   id:
     | '__root__'
     | '/'
@@ -215,6 +331,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/_authenticated/analytics'
+    | '/_authenticated/behavior'
+    | '/_authenticated/benchmark'
     | '/_authenticated/coach'
     | '/_authenticated/correlations'
     | '/_authenticated/dashboard'
@@ -222,11 +340,19 @@ export interface FileRouteTypes {
     | '/_authenticated/drawdown'
     | '/_authenticated/equity'
     | '/_authenticated/journal'
+    | '/_authenticated/market-intelligence'
     | '/_authenticated/monte-carlo'
+    | '/_authenticated/performance-metrics'
+    | '/_authenticated/portfolio'
+    | '/_authenticated/position-sizing'
     | '/_authenticated/probability'
     | '/_authenticated/psychology'
     | '/_authenticated/quant-stats'
+    | '/_authenticated/risk-of-ruin'
+    | '/_authenticated/session-intelligence'
     | '/_authenticated/settings'
+    | '/_authenticated/strategy-lab'
+    | '/_authenticated/trade-replay'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -266,11 +392,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/trade-replay': {
+      id: '/_authenticated/trade-replay'
+      path: '/trade-replay'
+      fullPath: '/trade-replay'
+      preLoaderRoute: typeof AuthenticatedTradeReplayRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/strategy-lab': {
+      id: '/_authenticated/strategy-lab'
+      path: '/strategy-lab'
+      fullPath: '/strategy-lab'
+      preLoaderRoute: typeof AuthenticatedStrategyLabRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/session-intelligence': {
+      id: '/_authenticated/session-intelligence'
+      path: '/session-intelligence'
+      fullPath: '/session-intelligence'
+      preLoaderRoute: typeof AuthenticatedSessionIntelligenceRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/risk-of-ruin': {
+      id: '/_authenticated/risk-of-ruin'
+      path: '/risk-of-ruin'
+      fullPath: '/risk-of-ruin'
+      preLoaderRoute: typeof AuthenticatedRiskOfRuinRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/quant-stats': {
@@ -294,11 +448,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProbabilityRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/position-sizing': {
+      id: '/_authenticated/position-sizing'
+      path: '/position-sizing'
+      fullPath: '/position-sizing'
+      preLoaderRoute: typeof AuthenticatedPositionSizingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/portfolio': {
+      id: '/_authenticated/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof AuthenticatedPortfolioRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/performance-metrics': {
+      id: '/_authenticated/performance-metrics'
+      path: '/performance-metrics'
+      fullPath: '/performance-metrics'
+      preLoaderRoute: typeof AuthenticatedPerformanceMetricsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/monte-carlo': {
       id: '/_authenticated/monte-carlo'
       path: '/monte-carlo'
       fullPath: '/monte-carlo'
       preLoaderRoute: typeof AuthenticatedMonteCarloRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/market-intelligence': {
+      id: '/_authenticated/market-intelligence'
+      path: '/market-intelligence'
+      fullPath: '/market-intelligence'
+      preLoaderRoute: typeof AuthenticatedMarketIntelligenceRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/journal': {
@@ -350,6 +532,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCoachRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/benchmark': {
+      id: '/_authenticated/benchmark'
+      path: '/benchmark'
+      fullPath: '/benchmark'
+      preLoaderRoute: typeof AuthenticatedBenchmarkRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/behavior': {
+      id: '/_authenticated/behavior'
+      path: '/behavior'
+      fullPath: '/behavior'
+      preLoaderRoute: typeof AuthenticatedBehaviorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/analytics': {
       id: '/_authenticated/analytics'
       path: '/analytics'
@@ -362,6 +558,8 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
+  AuthenticatedBehaviorRoute: typeof AuthenticatedBehaviorRoute
+  AuthenticatedBenchmarkRoute: typeof AuthenticatedBenchmarkRoute
   AuthenticatedCoachRoute: typeof AuthenticatedCoachRoute
   AuthenticatedCorrelationsRoute: typeof AuthenticatedCorrelationsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
@@ -369,15 +567,25 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDrawdownRoute: typeof AuthenticatedDrawdownRoute
   AuthenticatedEquityRoute: typeof AuthenticatedEquityRoute
   AuthenticatedJournalRoute: typeof AuthenticatedJournalRoute
+  AuthenticatedMarketIntelligenceRoute: typeof AuthenticatedMarketIntelligenceRoute
   AuthenticatedMonteCarloRoute: typeof AuthenticatedMonteCarloRoute
+  AuthenticatedPerformanceMetricsRoute: typeof AuthenticatedPerformanceMetricsRoute
+  AuthenticatedPortfolioRoute: typeof AuthenticatedPortfolioRoute
+  AuthenticatedPositionSizingRoute: typeof AuthenticatedPositionSizingRoute
   AuthenticatedProbabilityRoute: typeof AuthenticatedProbabilityRoute
   AuthenticatedPsychologyRoute: typeof AuthenticatedPsychologyRoute
   AuthenticatedQuantStatsRoute: typeof AuthenticatedQuantStatsRoute
+  AuthenticatedRiskOfRuinRoute: typeof AuthenticatedRiskOfRuinRoute
+  AuthenticatedSessionIntelligenceRoute: typeof AuthenticatedSessionIntelligenceRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedStrategyLabRoute: typeof AuthenticatedStrategyLabRoute
+  AuthenticatedTradeReplayRoute: typeof AuthenticatedTradeReplayRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
+  AuthenticatedBehaviorRoute: AuthenticatedBehaviorRoute,
+  AuthenticatedBenchmarkRoute: AuthenticatedBenchmarkRoute,
   AuthenticatedCoachRoute: AuthenticatedCoachRoute,
   AuthenticatedCorrelationsRoute: AuthenticatedCorrelationsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
@@ -385,11 +593,19 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDrawdownRoute: AuthenticatedDrawdownRoute,
   AuthenticatedEquityRoute: AuthenticatedEquityRoute,
   AuthenticatedJournalRoute: AuthenticatedJournalRoute,
+  AuthenticatedMarketIntelligenceRoute: AuthenticatedMarketIntelligenceRoute,
   AuthenticatedMonteCarloRoute: AuthenticatedMonteCarloRoute,
+  AuthenticatedPerformanceMetricsRoute: AuthenticatedPerformanceMetricsRoute,
+  AuthenticatedPortfolioRoute: AuthenticatedPortfolioRoute,
+  AuthenticatedPositionSizingRoute: AuthenticatedPositionSizingRoute,
   AuthenticatedProbabilityRoute: AuthenticatedProbabilityRoute,
   AuthenticatedPsychologyRoute: AuthenticatedPsychologyRoute,
   AuthenticatedQuantStatsRoute: AuthenticatedQuantStatsRoute,
+  AuthenticatedRiskOfRuinRoute: AuthenticatedRiskOfRuinRoute,
+  AuthenticatedSessionIntelligenceRoute: AuthenticatedSessionIntelligenceRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedStrategyLabRoute: AuthenticatedStrategyLabRoute,
+  AuthenticatedTradeReplayRoute: AuthenticatedTradeReplayRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
