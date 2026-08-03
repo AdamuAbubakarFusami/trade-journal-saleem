@@ -2,6 +2,15 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   BarChart3,
+  Clock,
+  FlaskConical,
+  Gauge,
+  Globe,
+  History,
+  PieChart,
+  Scale,
+  ShieldAlert,
+  Trophy,
   BarChart4,
   BrainCircuit,
   Dices,
@@ -44,6 +53,20 @@ const INSTITUTIONAL = [
   { to: "/distribution", label: "Trade Distribution", icon: BarChart4 },
   { to: "/correlations", label: "Correlations", icon: Network },
 ] as const;
+
+const INTELLIGENCE = [
+  { to: "/risk-of-ruin", label: "Risk of Ruin", icon: ShieldAlert },
+  { to: "/position-sizing", label: "Position Sizing", icon: Scale },
+  { to: "/performance-metrics", label: "Performance Metrics", icon: Gauge },
+  { to: "/behavior", label: "Behavioral Intelligence", icon: BrainCircuit },
+  { to: "/strategy-lab", label: "Strategy Lab", icon: FlaskConical },
+  { to: "/session-intelligence", label: "Session Intelligence", icon: Clock },
+  { to: "/market-intelligence", label: "Market Intelligence", icon: Globe },
+  { to: "/trade-replay", label: "Trade Replay", icon: History },
+  { to: "/benchmark", label: "AI Benchmark", icon: Trophy },
+  { to: "/portfolio", label: "Portfolio Analytics", icon: PieChart },
+] as const;
+
 
 
 export function AppShell({
@@ -90,28 +113,35 @@ export function AppShell({
           </Link>
         );
       })}
-      <p className="mt-5 px-3 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground/70">
-        Institutional Analytics
-      </p>
-      {INSTITUTIONAL.map((item) => {
-        const active = pathname.startsWith(item.to);
-        return (
-          <Link
-            key={item.to}
-            to={item.to}
-            onClick={() => setOpen(false)}
-            className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-              active
-                ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-foreground",
-            )}
-          >
-            <item.icon className="h-4 w-4" />
-            {item.label}
-          </Link>
-        );
-      })}
+      {[
+        { heading: "Institutional Analytics", items: INSTITUTIONAL },
+        { heading: "Institutional Intelligence", items: INTELLIGENCE },
+      ].map((section) => (
+        <div key={section.heading}>
+          <p className="mt-5 px-3 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground/70">
+            {section.heading}
+          </p>
+          {section.items.map((item) => {
+            const active = pathname.startsWith(item.to);
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  active
+                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                    : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-foreground",
+                )}
+              >
+                <item.icon className="h-4 w-4" />
+                {item.label}
+              </Link>
+            );
+          })}
+        </div>
+      ))}
     </nav>
   );
 
