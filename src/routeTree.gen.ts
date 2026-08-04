@@ -31,6 +31,7 @@ import { Route as AuthenticatedEquityRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedDrawdownRouteImport } from './routes/_authenticated/drawdown'
 import { Route as AuthenticatedDistributionRouteImport } from './routes/_authenticated/distribution'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedCsvImportRouteImport } from './routes/_authenticated/csv-import'
 import { Route as AuthenticatedCorrelationsRouteImport } from './routes/_authenticated/correlations'
 import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/coach'
 import { Route as AuthenticatedBenchmarkRouteImport } from './routes/_authenticated/benchmark'
@@ -154,6 +155,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCsvImportRoute = AuthenticatedCsvImportRouteImport.update({
+  id: '/csv-import',
+  path: '/csv-import',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCorrelationsRoute =
   AuthenticatedCorrelationsRouteImport.update({
     id: '/correlations',
@@ -190,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/benchmark': typeof AuthenticatedBenchmarkRoute
   '/coach': typeof AuthenticatedCoachRoute
   '/correlations': typeof AuthenticatedCorrelationsRoute
+  '/csv-import': typeof AuthenticatedCsvImportRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/distribution': typeof AuthenticatedDistributionRoute
   '/drawdown': typeof AuthenticatedDrawdownRoute
@@ -218,6 +225,7 @@ export interface FileRoutesByTo {
   '/benchmark': typeof AuthenticatedBenchmarkRoute
   '/coach': typeof AuthenticatedCoachRoute
   '/correlations': typeof AuthenticatedCorrelationsRoute
+  '/csv-import': typeof AuthenticatedCsvImportRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/distribution': typeof AuthenticatedDistributionRoute
   '/drawdown': typeof AuthenticatedDrawdownRoute
@@ -248,6 +256,7 @@ export interface FileRoutesById {
   '/_authenticated/benchmark': typeof AuthenticatedBenchmarkRoute
   '/_authenticated/coach': typeof AuthenticatedCoachRoute
   '/_authenticated/correlations': typeof AuthenticatedCorrelationsRoute
+  '/_authenticated/csv-import': typeof AuthenticatedCsvImportRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/distribution': typeof AuthenticatedDistributionRoute
   '/_authenticated/drawdown': typeof AuthenticatedDrawdownRoute
@@ -278,6 +287,7 @@ export interface FileRouteTypes {
     | '/benchmark'
     | '/coach'
     | '/correlations'
+    | '/csv-import'
     | '/dashboard'
     | '/distribution'
     | '/drawdown'
@@ -306,6 +316,7 @@ export interface FileRouteTypes {
     | '/benchmark'
     | '/coach'
     | '/correlations'
+    | '/csv-import'
     | '/dashboard'
     | '/distribution'
     | '/drawdown'
@@ -335,6 +346,7 @@ export interface FileRouteTypes {
     | '/_authenticated/benchmark'
     | '/_authenticated/coach'
     | '/_authenticated/correlations'
+    | '/_authenticated/csv-import'
     | '/_authenticated/dashboard'
     | '/_authenticated/distribution'
     | '/_authenticated/drawdown'
@@ -518,6 +530,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/csv-import': {
+      id: '/_authenticated/csv-import'
+      path: '/csv-import'
+      fullPath: '/csv-import'
+      preLoaderRoute: typeof AuthenticatedCsvImportRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/correlations': {
       id: '/_authenticated/correlations'
       path: '/correlations'
@@ -562,6 +581,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBenchmarkRoute: typeof AuthenticatedBenchmarkRoute
   AuthenticatedCoachRoute: typeof AuthenticatedCoachRoute
   AuthenticatedCorrelationsRoute: typeof AuthenticatedCorrelationsRoute
+  AuthenticatedCsvImportRoute: typeof AuthenticatedCsvImportRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDistributionRoute: typeof AuthenticatedDistributionRoute
   AuthenticatedDrawdownRoute: typeof AuthenticatedDrawdownRoute
@@ -588,6 +608,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBenchmarkRoute: AuthenticatedBenchmarkRoute,
   AuthenticatedCoachRoute: AuthenticatedCoachRoute,
   AuthenticatedCorrelationsRoute: AuthenticatedCorrelationsRoute,
+  AuthenticatedCsvImportRoute: AuthenticatedCsvImportRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDistributionRoute: AuthenticatedDistributionRoute,
   AuthenticatedDrawdownRoute: AuthenticatedDrawdownRoute,

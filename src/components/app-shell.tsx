@@ -3,7 +3,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   BarChart3,
   Clock,
+  FileSpreadsheet,
   FlaskConical,
+
   Gauge,
   Globe,
   History,
@@ -67,6 +69,9 @@ const INTELLIGENCE = [
   { to: "/portfolio", label: "Portfolio Analytics", icon: PieChart },
 ] as const;
 
+const AUTOMATION = [{ to: "/csv-import", label: "CSV Import", icon: FileSpreadsheet }] as const;
+
+
 
 
 export function AppShell({
@@ -116,6 +121,7 @@ export function AppShell({
       {[
         { heading: "Institutional Analytics", items: INSTITUTIONAL },
         { heading: "Institutional Intelligence", items: INTELLIGENCE },
+        { heading: "Data Automation", items: AUTOMATION },
       ].map((section) => (
         <div key={section.heading}>
           <p className="mt-5 px-3 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground/70">

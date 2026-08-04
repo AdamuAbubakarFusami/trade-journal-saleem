@@ -14,6 +14,84 @@ export type Database = {
   }
   public: {
     Tables: {
+      import_batches: {
+        Row: {
+          created_at: string
+          duplicate_count: number
+          duration_ms: number
+          error_count: number
+          file_name: string
+          id: string
+          imported_count: number
+          log: Json
+          platform: string
+          skipped_count: number
+          status: string
+          total_rows: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          duplicate_count?: number
+          duration_ms?: number
+          error_count?: number
+          file_name?: string
+          id?: string
+          imported_count?: number
+          log?: Json
+          platform?: string
+          skipped_count?: number
+          status?: string
+          total_rows?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          duplicate_count?: number
+          duration_ms?: number
+          error_count?: number
+          file_name?: string
+          id?: string
+          imported_count?: number
+          log?: Json
+          platform?: string
+          skipped_count?: number
+          status?: string
+          total_rows?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      import_mappings: {
+        Row: {
+          created_at: string
+          id: string
+          mapping: Json
+          platform: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          mapping?: Json
+          platform: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          mapping?: Json
+          platform?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
