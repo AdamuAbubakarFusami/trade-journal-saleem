@@ -3,7 +3,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   BarChart3,
   Clock,
+  FileSpreadsheet,
   FlaskConical,
+
   Gauge,
   Globe,
   History,
@@ -119,6 +121,7 @@ export function AppShell({
       {[
         { heading: "Institutional Analytics", items: INSTITUTIONAL },
         { heading: "Institutional Intelligence", items: INTELLIGENCE },
+        { heading: "Data Automation", items: AUTOMATION },
       ].map((section) => (
         <div key={section.heading}>
           <p className="mt-5 px-3 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground/70">
