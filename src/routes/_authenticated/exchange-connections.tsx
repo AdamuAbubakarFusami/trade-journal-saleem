@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
   CheckCircle2,
@@ -151,6 +151,27 @@ function ExchangeConnectionsPage() {
       successRate: runList.length ? `${Math.round((ok / runList.length) * 100)}%` : "—",
     };
   }, [connections.data, runs.data]);
+
+  // Auto sync: refresh eligible connections (last synced > 6h ago) on visit.
+  const autoRan = useRef(false);
+  useEffect(() => {
+    if (autoRan.current || !connections.data) return;
+    const due = connections.data.filter(
+      (c) =>
+        c.auto_sync &&
+        c.status === "connected" &&
+        (!c.last_sync_at || Date.now() - new Date(c.last_sync_at).getTime() > 6 * 3600_000),
+    );
+    if (!due.length) return;
+    autoRan.current = true;
+    (async () => {
+      for (const c of due) {
+        const meta = EXCHANGE_META[c.exchange as ExchangeId];
+        await runSyncNow(c.id, meta?.label ?? c.exchange);
+      }
+    })();
+     
+  }, [connections.data]);
 
   function openDialog(meta: ExchangeMeta) {
     setDialogFor(meta);
