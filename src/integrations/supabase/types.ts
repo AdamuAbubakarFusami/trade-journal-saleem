@@ -14,6 +14,148 @@ export type Database = {
   }
   public: {
     Tables: {
+      exchange_connections: {
+        Row: {
+          api_status: string
+          auto_sync: boolean
+          created_at: string
+          exchange: string
+          id: string
+          imported_trades: number
+          label: string
+          last_sync_at: string | null
+          last_sync_status: string | null
+          scopes: string[]
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          api_status?: string
+          auto_sync?: boolean
+          created_at?: string
+          exchange: string
+          id?: string
+          imported_trades?: number
+          label?: string
+          last_sync_at?: string | null
+          last_sync_status?: string | null
+          scopes?: string[]
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          api_status?: string
+          auto_sync?: boolean
+          created_at?: string
+          exchange?: string
+          id?: string
+          imported_trades?: number
+          label?: string
+          last_sync_at?: string | null
+          last_sync_status?: string | null
+          scopes?: string[]
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      exchange_credentials: {
+        Row: {
+          connection_id: string
+          created_at: string
+          enc_api_key: string
+          enc_api_secret: string
+          enc_passphrase: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          connection_id: string
+          created_at?: string
+          enc_api_key: string
+          enc_api_secret: string
+          enc_passphrase?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          connection_id?: string
+          created_at?: string
+          enc_api_key?: string
+          enc_api_secret?: string
+          enc_passphrase?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exchange_credentials_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: true
+            referencedRelation: "exchange_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exchange_sync_runs: {
+        Row: {
+          connection_id: string | null
+          created_at: string
+          duplicate_count: number
+          duration_ms: number
+          error_count: number
+          exchange: string
+          id: string
+          imported_count: number
+          log: Json
+          scopes: string[]
+          skipped_count: number
+          status: string
+          user_id: string
+        }
+        Insert: {
+          connection_id?: string | null
+          created_at?: string
+          duplicate_count?: number
+          duration_ms?: number
+          error_count?: number
+          exchange: string
+          id?: string
+          imported_count?: number
+          log?: Json
+          scopes?: string[]
+          skipped_count?: number
+          status?: string
+          user_id: string
+        }
+        Update: {
+          connection_id?: string | null
+          created_at?: string
+          duplicate_count?: number
+          duration_ms?: number
+          error_count?: number
+          exchange?: string
+          id?: string
+          imported_count?: number
+          log?: Json
+          scopes?: string[]
+          skipped_count?: number
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exchange_sync_runs_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "exchange_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       import_batches: {
         Row: {
           created_at: string
