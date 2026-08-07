@@ -69,7 +69,10 @@ const INTELLIGENCE = [
   { to: "/portfolio", label: "Portfolio Analytics", icon: PieChart },
 ] as const;
 
-const AUTOMATION = [{ to: "/csv-import", label: "CSV Import", icon: FileSpreadsheet }] as const;
+const AUTOMATION = [
+  { to: "/csv-import", label: "CSV Import", icon: FileSpreadsheet },
+  { to: "/exchange-connections", label: "Exchange Connections", icon: Plug },
+] as const;
 
 
 
