@@ -27,6 +27,7 @@ import { Route as AuthenticatedPerformanceMetricsRouteImport } from './routes/_a
 import { Route as AuthenticatedMonteCarloRouteImport } from './routes/_authenticated/monte-carlo'
 import { Route as AuthenticatedMarketIntelligenceRouteImport } from './routes/_authenticated/market-intelligence'
 import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticated/journal'
+import { Route as AuthenticatedExchangeConnectionsRouteImport } from './routes/_authenticated/exchange-connections'
 import { Route as AuthenticatedEquityRouteImport } from './routes/_authenticated/equity'
 import { Route as AuthenticatedDrawdownRouteImport } from './routes/_authenticated/drawdown'
 import { Route as AuthenticatedDistributionRouteImport } from './routes/_authenticated/distribution'
@@ -134,6 +135,12 @@ const AuthenticatedJournalRoute = AuthenticatedJournalRouteImport.update({
   path: '/journal',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedExchangeConnectionsRoute =
+  AuthenticatedExchangeConnectionsRouteImport.update({
+    id: '/exchange-connections',
+    path: '/exchange-connections',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedEquityRoute = AuthenticatedEquityRouteImport.update({
   id: '/equity',
   path: '/equity',
@@ -201,6 +208,7 @@ export interface FileRoutesByFullPath {
   '/distribution': typeof AuthenticatedDistributionRoute
   '/drawdown': typeof AuthenticatedDrawdownRoute
   '/equity': typeof AuthenticatedEquityRoute
+  '/exchange-connections': typeof AuthenticatedExchangeConnectionsRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/market-intelligence': typeof AuthenticatedMarketIntelligenceRoute
   '/monte-carlo': typeof AuthenticatedMonteCarloRoute
@@ -230,6 +238,7 @@ export interface FileRoutesByTo {
   '/distribution': typeof AuthenticatedDistributionRoute
   '/drawdown': typeof AuthenticatedDrawdownRoute
   '/equity': typeof AuthenticatedEquityRoute
+  '/exchange-connections': typeof AuthenticatedExchangeConnectionsRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/market-intelligence': typeof AuthenticatedMarketIntelligenceRoute
   '/monte-carlo': typeof AuthenticatedMonteCarloRoute
@@ -261,6 +270,7 @@ export interface FileRoutesById {
   '/_authenticated/distribution': typeof AuthenticatedDistributionRoute
   '/_authenticated/drawdown': typeof AuthenticatedDrawdownRoute
   '/_authenticated/equity': typeof AuthenticatedEquityRoute
+  '/_authenticated/exchange-connections': typeof AuthenticatedExchangeConnectionsRoute
   '/_authenticated/journal': typeof AuthenticatedJournalRoute
   '/_authenticated/market-intelligence': typeof AuthenticatedMarketIntelligenceRoute
   '/_authenticated/monte-carlo': typeof AuthenticatedMonteCarloRoute
@@ -292,6 +302,7 @@ export interface FileRouteTypes {
     | '/distribution'
     | '/drawdown'
     | '/equity'
+    | '/exchange-connections'
     | '/journal'
     | '/market-intelligence'
     | '/monte-carlo'
@@ -321,6 +332,7 @@ export interface FileRouteTypes {
     | '/distribution'
     | '/drawdown'
     | '/equity'
+    | '/exchange-connections'
     | '/journal'
     | '/market-intelligence'
     | '/monte-carlo'
@@ -351,6 +363,7 @@ export interface FileRouteTypes {
     | '/_authenticated/distribution'
     | '/_authenticated/drawdown'
     | '/_authenticated/equity'
+    | '/_authenticated/exchange-connections'
     | '/_authenticated/journal'
     | '/_authenticated/market-intelligence'
     | '/_authenticated/monte-carlo'
@@ -502,6 +515,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedJournalRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/exchange-connections': {
+      id: '/_authenticated/exchange-connections'
+      path: '/exchange-connections'
+      fullPath: '/exchange-connections'
+      preLoaderRoute: typeof AuthenticatedExchangeConnectionsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/equity': {
       id: '/_authenticated/equity'
       path: '/equity'
@@ -586,6 +606,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDistributionRoute: typeof AuthenticatedDistributionRoute
   AuthenticatedDrawdownRoute: typeof AuthenticatedDrawdownRoute
   AuthenticatedEquityRoute: typeof AuthenticatedEquityRoute
+  AuthenticatedExchangeConnectionsRoute: typeof AuthenticatedExchangeConnectionsRoute
   AuthenticatedJournalRoute: typeof AuthenticatedJournalRoute
   AuthenticatedMarketIntelligenceRoute: typeof AuthenticatedMarketIntelligenceRoute
   AuthenticatedMonteCarloRoute: typeof AuthenticatedMonteCarloRoute
@@ -613,6 +634,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDistributionRoute: AuthenticatedDistributionRoute,
   AuthenticatedDrawdownRoute: AuthenticatedDrawdownRoute,
   AuthenticatedEquityRoute: AuthenticatedEquityRoute,
+  AuthenticatedExchangeConnectionsRoute: AuthenticatedExchangeConnectionsRoute,
   AuthenticatedJournalRoute: AuthenticatedJournalRoute,
   AuthenticatedMarketIntelligenceRoute: AuthenticatedMarketIntelligenceRoute,
   AuthenticatedMonteCarloRoute: AuthenticatedMonteCarloRoute,
