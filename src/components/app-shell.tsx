@@ -23,6 +23,7 @@ import {
   Network,
   NotebookPen,
   Percent,
+  Plug,
   Sigma,
   Sparkles,
   Settings,
