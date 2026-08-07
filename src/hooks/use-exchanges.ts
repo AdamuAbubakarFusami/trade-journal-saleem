@@ -46,11 +46,21 @@ function useInvalidate() {
   };
 }
 
+export type ConnectInput = {
+  exchange: string;
+  label?: string;
+  apiKey: string;
+  apiSecret: string;
+  passphrase?: string | null;
+  scopes: string[];
+  autoSync?: boolean;
+};
+
 export function useConnectExchange() {
   const fn = useServerFn(connectExchange);
   const invalidate = useInvalidate();
   return useMutation({
-    mutationFn: (input: Parameters<typeof connectExchange>[0]["data"]) => fn({ data: input }),
+    mutationFn: (input: ConnectInput) => fn({ data: input as never }),
     onSuccess: invalidate,
   });
 }
