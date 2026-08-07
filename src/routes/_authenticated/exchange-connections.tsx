@@ -43,6 +43,7 @@ import {
   useExchangeConnections,
   useSyncExchange,
   useSyncRuns,
+  useUpdateExchangeSettings,
 } from "@/hooks/use-exchanges";
 import { EXCHANGE_LIST, EXCHANGE_META, scopeLabel, type ExchangeId, type ExchangeMeta } from "@/lib/exchange";
 import { cn } from "@/lib/utils";
@@ -111,6 +112,7 @@ function ExchangeConnectionsPage() {
   const connect = useConnectExchange();
   const disconnect = useDisconnectExchange();
   const sync = useSyncExchange();
+  const updateSettings = useUpdateExchangeSettings();
 
   const [dialogFor, setDialogFor] = useState<ExchangeMeta | null>(null);
   const [form, setForm] = useState({ apiKey: "", apiSecret: "", passphrase: "", label: "" });
