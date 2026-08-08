@@ -27,6 +27,7 @@ import {
   Sigma,
   Sparkles,
   Settings,
+  Wallet,
   TrendingDown,
   TrendingUp,
   X,
@@ -73,6 +74,7 @@ const INTELLIGENCE = [
 const AUTOMATION = [
   { to: "/csv-import", label: "CSV Import", icon: FileSpreadsheet },
   { to: "/exchange-connections", label: "Exchange Connections", icon: Plug },
+  { to: "/wallet-tracking", label: "Wallet Tracking", icon: Wallet },
 ] as const;
 
 
