@@ -375,6 +375,209 @@ export type Database = {
         }
         Relationships: []
       }
+      wallet_swaps: {
+        Row: {
+          amount_in: number | null
+          amount_out: number | null
+          asset: string
+          block_time: string
+          chain: string
+          created_at: string
+          direction: string
+          fee_usd: number | null
+          id: string
+          kind: string
+          price: number | null
+          raw: Json
+          status: string
+          token_in: string | null
+          token_out: string | null
+          trade_id: string | null
+          tx_hash: string
+          updated_at: string
+          user_id: string
+          value_usd: number | null
+          wallet_id: string
+        }
+        Insert: {
+          amount_in?: number | null
+          amount_out?: number | null
+          asset?: string
+          block_time?: string
+          chain: string
+          created_at?: string
+          direction?: string
+          fee_usd?: number | null
+          id?: string
+          kind?: string
+          price?: number | null
+          raw?: Json
+          status?: string
+          token_in?: string | null
+          token_out?: string | null
+          trade_id?: string | null
+          tx_hash: string
+          updated_at?: string
+          user_id: string
+          value_usd?: number | null
+          wallet_id: string
+        }
+        Update: {
+          amount_in?: number | null
+          amount_out?: number | null
+          asset?: string
+          block_time?: string
+          chain?: string
+          created_at?: string
+          direction?: string
+          fee_usd?: number | null
+          id?: string
+          kind?: string
+          price?: number | null
+          raw?: Json
+          status?: string
+          token_in?: string | null
+          token_out?: string | null
+          trade_id?: string | null
+          tx_hash?: string
+          updated_at?: string
+          user_id?: string
+          value_usd?: number | null
+          wallet_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wallet_swaps_trade_id_fkey"
+            columns: ["trade_id"]
+            isOneToOne: false
+            referencedRelation: "trades"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wallet_swaps_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wallet_sync_runs: {
+        Row: {
+          address: string
+          chain: string
+          created_at: string
+          discovered_count: number
+          duplicate_count: number
+          duration_ms: number
+          error_count: number
+          id: string
+          imported_count: number
+          log: Json
+          skipped_count: number
+          status: string
+          user_id: string
+          wallet_id: string | null
+        }
+        Insert: {
+          address?: string
+          chain: string
+          created_at?: string
+          discovered_count?: number
+          duplicate_count?: number
+          duration_ms?: number
+          error_count?: number
+          id?: string
+          imported_count?: number
+          log?: Json
+          skipped_count?: number
+          status?: string
+          user_id: string
+          wallet_id?: string | null
+        }
+        Update: {
+          address?: string
+          chain?: string
+          created_at?: string
+          discovered_count?: number
+          duplicate_count?: number
+          duration_ms?: number
+          error_count?: number
+          id?: string
+          imported_count?: number
+          log?: Json
+          skipped_count?: number
+          status?: string
+          user_id?: string
+          wallet_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wallet_sync_runs_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wallets: {
+        Row: {
+          address: string
+          auto_sync: boolean
+          chain: string
+          created_at: string
+          discovered_trades: number
+          id: string
+          imported_trades: number
+          label: string
+          last_sync_at: string | null
+          last_sync_status: string | null
+          native_balance: number | null
+          native_symbol: string | null
+          provider: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address: string
+          auto_sync?: boolean
+          chain: string
+          created_at?: string
+          discovered_trades?: number
+          id?: string
+          imported_trades?: number
+          label?: string
+          last_sync_at?: string | null
+          last_sync_status?: string | null
+          native_balance?: number | null
+          native_symbol?: string | null
+          provider?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          auto_sync?: boolean
+          chain?: string
+          created_at?: string
+          discovered_trades?: number
+          id?: string
+          imported_trades?: number
+          label?: string
+          last_sync_at?: string | null
+          last_sync_status?: string | null
+          native_balance?: number | null
+          native_symbol?: string | null
+          provider?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
