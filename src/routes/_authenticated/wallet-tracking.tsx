@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
   CheckCircle2,
@@ -159,6 +159,19 @@ function WalletTrackingPage() {
   const successRate = runList.length
     ? (runList.filter((r) => r.status === "completed").length / runList.length) * 100
     : null;
+
+  const autoRan = useRef(false);
+  useEffect(() => {
+    if (autoRan.current || !rows.length) return;
+    autoRan.current = true;
+    const stale = rows.filter(
+      (w) =>
+        w.auto_sync &&
+        (!w.last_sync_at || Date.now() - new Date(w.last_sync_at).getTime() > 6 * 60 * 60 * 1000),
+    );
+    for (const w of stale) scanWallet.mutate(w.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rows.length]);
 
   const selectedIds = Object.entries(selected)
     .filter(([, v]) => v)

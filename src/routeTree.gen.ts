@@ -13,6 +13,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedWalletTrackingRouteImport } from './routes/_authenticated/wallet-tracking'
 import { Route as AuthenticatedTradeReplayRouteImport } from './routes/_authenticated/trade-replay'
 import { Route as AuthenticatedStrategyLabRouteImport } from './routes/_authenticated/strategy-lab'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
@@ -58,6 +59,12 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedWalletTrackingRoute =
+  AuthenticatedWalletTrackingRouteImport.update({
+    id: '/wallet-tracking',
+    path: '/wallet-tracking',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTradeReplayRoute =
   AuthenticatedTradeReplayRouteImport.update({
     id: '/trade-replay',
@@ -223,6 +230,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/strategy-lab': typeof AuthenticatedStrategyLabRoute
   '/trade-replay': typeof AuthenticatedTradeReplayRoute
+  '/wallet-tracking': typeof AuthenticatedWalletTrackingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -253,6 +261,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/strategy-lab': typeof AuthenticatedStrategyLabRoute
   '/trade-replay': typeof AuthenticatedTradeReplayRoute
+  '/wallet-tracking': typeof AuthenticatedWalletTrackingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -285,6 +294,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/strategy-lab': typeof AuthenticatedStrategyLabRoute
   '/_authenticated/trade-replay': typeof AuthenticatedTradeReplayRoute
+  '/_authenticated/wallet-tracking': typeof AuthenticatedWalletTrackingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -317,6 +327,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/strategy-lab'
     | '/trade-replay'
+    | '/wallet-tracking'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -347,6 +358,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/strategy-lab'
     | '/trade-replay'
+    | '/wallet-tracking'
   id:
     | '__root__'
     | '/'
@@ -378,6 +390,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/strategy-lab'
     | '/_authenticated/trade-replay'
+    | '/_authenticated/wallet-tracking'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -416,6 +429,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/wallet-tracking': {
+      id: '/_authenticated/wallet-tracking'
+      path: '/wallet-tracking'
+      fullPath: '/wallet-tracking'
+      preLoaderRoute: typeof AuthenticatedWalletTrackingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/trade-replay': {
       id: '/_authenticated/trade-replay'
@@ -621,6 +641,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedStrategyLabRoute: typeof AuthenticatedStrategyLabRoute
   AuthenticatedTradeReplayRoute: typeof AuthenticatedTradeReplayRoute
+  AuthenticatedWalletTrackingRoute: typeof AuthenticatedWalletTrackingRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -649,6 +670,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedStrategyLabRoute: AuthenticatedStrategyLabRoute,
   AuthenticatedTradeReplayRoute: AuthenticatedTradeReplayRoute,
+  AuthenticatedWalletTrackingRoute: AuthenticatedWalletTrackingRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -663,13 +685,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
