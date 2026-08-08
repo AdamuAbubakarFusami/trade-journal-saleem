@@ -180,7 +180,14 @@ function WalletTrackingPage() {
   async function connectBrowserWallet(target: WalletProvider) {
     try {
       if (target === "phantom") {
-        const sol = (window as unknown as { solana?: { isPhantom?: boolean; connect: () => Promise<{ publicKey: { toString(): string } }> } }).solana;
+        const sol = (
+          window as unknown as {
+            solana?: {
+              isPhantom?: boolean;
+              connect: () => Promise<{ publicKey: { toString(): string } }>;
+            };
+          }
+        ).solana;
         if (!sol?.isPhantom) throw new Error("Phantom was not detected in this browser.");
         const res = await sol.connect();
         setChain("solana");
@@ -190,7 +197,11 @@ function WalletTrackingPage() {
         return;
       }
       if (target === "metamask") {
-        const eth = (window as unknown as { ethereum?: { request: (a: { method: string }) => Promise<string[]> } }).ethereum;
+        const eth = (
+          window as unknown as {
+            ethereum?: { request: (a: { method: string }) => Promise<string[]> };
+          }
+        ).ethereum;
         if (!eth) throw new Error("MetaMask was not detected in this browser.");
         const accounts = await eth.request({ method: "eth_requestAccounts" });
         if (!accounts?.length) throw new Error("No account was shared.");
@@ -212,7 +223,13 @@ function WalletTrackingPage() {
       toast.error(`Enter a valid ${CHAIN_META[chain].label} address.`);
       return;
     }
-    const res = await addWallet.mutateAsync({ chain, address: address.trim(), label, provider, autoSync });
+    const res = await addWallet.mutateAsync({
+      chain,
+      address: address.trim(),
+      label,
+      provider,
+      autoSync,
+    });
     if (!res.ok) {
       toast.error(res.message);
       return;
@@ -241,7 +258,9 @@ function WalletTrackingPage() {
     if (!ids.length) return;
     const r = await importSwaps.mutateAsync(ids);
     setSelected({});
-    toast.success(`${r.imported} trades added to your journal. Open Journal to add strategy, psychology and notes.`);
+    toast.success(
+      `${r.imported} trades added to your journal. Open Journal to add strategy, psychology and notes.`,
+    );
   }
 
   return (
@@ -274,8 +293,9 @@ function WalletTrackingPage() {
 
         <div className="ai-surface flex flex-wrap items-center gap-3 rounded-xl border border-border/60 p-4 text-sm text-muted-foreground">
           <ShieldCheck className="h-4 w-4 text-emerald-400" />
-          SaleemJournal never asks for private keys or seed phrases. Wallets are tracked read-only, and
-          transfers, NFTs, liquidity, staking and bridging are ignored — only trading swaps are discovered.
+          SaleemJournal never asks for private keys or seed phrases. Wallets are tracked read-only,
+          and transfers, NFTs, liquidity, staking and bridging are ignored — only trading swaps are
+          discovered.
           <PoweredBy className="ml-auto" />
         </div>
 
@@ -290,7 +310,8 @@ function WalletTrackingPage() {
             <Wallet className="mx-auto h-8 w-8 text-muted-foreground" />
             <p className="mt-3 font-medium">No wallets tracked yet</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Connect Phantom or MetaMask, or paste any wallet address to start discovering DEX swaps.
+              Connect Phantom or MetaMask, or paste any wallet address to start discovering DEX
+              swaps.
             </p>
             <Button className="mt-4" onClick={() => setOpen(true)}>
               Add your first wallet
@@ -316,7 +337,8 @@ function WalletTrackingPage() {
                       <p className="mt-1 font-mono text-xs">{shortAddress(w.address)}</p>
                     </div>
                     <Badge variant="outline" className="gap-1.5">
-                      <StatusDot status={w.last_sync_status ?? w.status} /> {w.last_sync_status ?? w.status}
+                      <StatusDot status={w.last_sync_status ?? w.status} />{" "}
+                      {w.last_sync_status ?? w.status}
                     </Badge>
                   </div>
 
@@ -324,7 +346,9 @@ function WalletTrackingPage() {
                     <div className="rounded-lg border border-border/50 py-2">
                       <p className="text-muted-foreground">Balance</p>
                       <p className="font-semibold">
-                        {w.native_balance == null ? "—" : `${fmtNum(w.native_balance, 4)} ${w.native_symbol ?? meta.native}`}
+                        {w.native_balance == null
+                          ? "—"
+                          : `${fmtNum(w.native_balance, 4)} ${w.native_symbol ?? meta.native}`}
                       </p>
                     </div>
                     <div className="rounded-lg border border-border/50 py-2">
@@ -345,7 +369,11 @@ function WalletTrackingPage() {
 
                   <div className="mt-auto flex flex-wrap items-center gap-2">
                     <Button size="sm" onClick={() => handleScan(w.id)} disabled={busy}>
-                      {busy ? <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="mr-2 h-3.5 w-3.5" />}
+                      {busy ? (
+                        <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                      ) : (
+                        <RefreshCw className="mr-2 h-3.5 w-3.5" />
+                      )}
                       Sync now
                     </Button>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -457,8 +485,12 @@ function WalletTrackingPage() {
                                 aria-label="Select swap"
                               />
                             </TableCell>
-                            <TableCell className="whitespace-nowrap text-xs">{fmtDate(s.block_time)}</TableCell>
-                            <TableCell className={cn("text-xs", meta.accent)}>{meta.label}</TableCell>
+                            <TableCell className="whitespace-nowrap text-xs">
+                              {fmtDate(s.block_time)}
+                            </TableCell>
+                            <TableCell className={cn("text-xs", meta.accent)}>
+                              {meta.label}
+                            </TableCell>
                             <TableCell className="font-medium">{s.asset}</TableCell>
                             <TableCell>
                               <Badge variant="outline" className="text-[10px] uppercase">
@@ -468,9 +500,15 @@ function WalletTrackingPage() {
                             <TableCell className="text-right text-xs">
                               {fmtNum(s.direction === "long" ? s.amount_out : s.amount_in)}
                             </TableCell>
-                            <TableCell className="text-right text-xs">{fmtNum(s.price, 6)}</TableCell>
-                            <TableCell className="text-right text-xs">{fmtNum(s.value_usd, 2)}</TableCell>
-                            <TableCell className="text-right text-xs">{fmtNum(s.fee_usd, 6)}</TableCell>
+                            <TableCell className="text-right text-xs">
+                              {fmtNum(s.price, 6)}
+                            </TableCell>
+                            <TableCell className="text-right text-xs">
+                              {fmtNum(s.value_usd, 2)}
+                            </TableCell>
+                            <TableCell className="text-right text-xs">
+                              {fmtNum(s.fee_usd, 6)}
+                            </TableCell>
                             <TableCell>
                               <a
                                 className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
@@ -507,7 +545,10 @@ function WalletTrackingPage() {
                 <TableBody>
                   {allSwaps.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="py-8 text-center text-sm text-muted-foreground">
+                      <TableCell
+                        colSpan={6}
+                        className="py-8 text-center text-sm text-muted-foreground"
+                      >
                         Not enough trading data yet.
                       </TableCell>
                     </TableRow>
@@ -516,7 +557,9 @@ function WalletTrackingPage() {
                       const meta = CHAIN_META[s.chain as ChainId] ?? CHAIN_META.ethereum;
                       return (
                         <TableRow key={s.id}>
-                          <TableCell className="whitespace-nowrap text-xs">{fmtDate(s.block_time)}</TableCell>
+                          <TableCell className="whitespace-nowrap text-xs">
+                            {fmtDate(s.block_time)}
+                          </TableCell>
                           <TableCell className={cn("text-xs", meta.accent)}>{meta.label}</TableCell>
                           <TableCell className="font-medium">{s.asset}</TableCell>
                           <TableCell className="text-xs text-muted-foreground">
@@ -524,7 +567,9 @@ function WalletTrackingPage() {
                           </TableCell>
                           <TableCell>
                             <Badge variant="outline" className="gap-1.5 text-[10px] uppercase">
-                              <StatusDot status={s.status === "imported" ? "completed" : s.status} />
+                              <StatusDot
+                                status={s.status === "imported" ? "completed" : s.status}
+                              />
                               {s.status}
                             </Badge>
                           </TableCell>
@@ -565,22 +610,31 @@ function WalletTrackingPage() {
                 <TableBody>
                   {runList.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={8} className="py-8 text-center text-sm text-muted-foreground">
+                      <TableCell
+                        colSpan={8}
+                        className="py-8 text-center text-sm text-muted-foreground"
+                      >
                         No syncs yet.
                       </TableCell>
                     </TableRow>
                   ) : (
                     runList.map((r) => (
                       <TableRow key={r.id}>
-                        <TableCell className="whitespace-nowrap text-xs">{fmtDate(r.created_at)}</TableCell>
+                        <TableCell className="whitespace-nowrap text-xs">
+                          {fmtDate(r.created_at)}
+                        </TableCell>
                         <TableCell className="text-xs">
                           {(CHAIN_META[r.chain as ChainId] ?? CHAIN_META.ethereum).label}
                         </TableCell>
-                        <TableCell className="font-mono text-xs">{shortAddress(r.address)}</TableCell>
+                        <TableCell className="font-mono text-xs">
+                          {shortAddress(r.address)}
+                        </TableCell>
                         <TableCell className="text-right text-xs">{r.discovered_count}</TableCell>
                         <TableCell className="text-right text-xs">{r.duplicate_count}</TableCell>
                         <TableCell className="text-right text-xs">{r.error_count}</TableCell>
-                        <TableCell className="text-right text-xs">{(r.duration_ms / 1000).toFixed(1)}s</TableCell>
+                        <TableCell className="text-right text-xs">
+                          {(r.duration_ms / 1000).toFixed(1)}s
+                        </TableCell>
                         <TableCell>
                           <Badge variant="outline" className="gap-1.5 text-[10px] uppercase">
                             <StatusDot status={r.status} /> {r.status}
@@ -661,7 +715,9 @@ function WalletTrackingPage() {
             <div className="flex items-center justify-between rounded-lg border border-border/60 p-3">
               <div>
                 <p className="text-sm font-medium">Auto sync</p>
-                <p className="text-xs text-muted-foreground">Re-scan this wallet when you open this page.</p>
+                <p className="text-xs text-muted-foreground">
+                  Re-scan this wallet when you open this page.
+                </p>
               </div>
               <Switch checked={autoSync} onCheckedChange={setAutoSync} />
             </div>

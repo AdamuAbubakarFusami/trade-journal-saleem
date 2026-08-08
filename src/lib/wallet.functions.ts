@@ -19,7 +19,10 @@ export const addWallet = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const address = data.address.trim();
     if (!isValidAddress(data.chain, address)) {
-      return { ok: false as const, message: `That does not look like a valid ${CHAIN_META[data.chain].label} address.` };
+      return {
+        ok: false as const,
+        message: `That does not look like a valid ${CHAIN_META[data.chain].label} address.`,
+      };
     }
     const { data: row, error } = await context.supabase
       .from("wallets")
@@ -39,7 +42,11 @@ export const addWallet = createServerFn({ method: "POST" })
       .select("id")
       .single();
     if (error) throw new Error(error.message);
-    return { ok: true as const, id: (row as { id: string }).id, message: "Wallet is now tracked read-only." };
+    return {
+      ok: true as const,
+      id: (row as { id: string }).id,
+      message: "Wallet is now tracked read-only.",
+    };
   });
 
 export const removeWallet = createServerFn({ method: "POST" })
@@ -175,7 +182,10 @@ export const importWalletSwaps = createServerFn({ method: "POST" })
         .maybeSingle();
       await context.supabase
         .from("wallets")
-        .update({ imported_trades: ((w as { imported_trades: number } | null)?.imported_trades ?? 0) + count } as never)
+        .update({
+          imported_trades:
+            ((w as { imported_trades: number } | null)?.imported_trades ?? 0) + count,
+        } as never)
         .eq("id", walletId);
     }
 

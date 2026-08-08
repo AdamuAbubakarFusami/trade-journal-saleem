@@ -35,7 +35,9 @@ export async function syncWallet(
     for (const e of result.errors) log.push(`warning: ${e}`);
     errorCount += result.errors.length;
 
-    log.push(`Scanned ${CHAIN_META[params.chain].label} — ${result.swaps.length} trading swaps detected.`);
+    log.push(
+      `Scanned ${CHAIN_META[params.chain].label} — ${result.swaps.length} trading swaps detected.`,
+    );
 
     const { data: existing } = await db
       .from("wallet_swaps")
@@ -83,7 +85,8 @@ export async function syncWallet(
 
     if (errorCount && !discovered) status = result.swaps.length ? "failed" : "partial";
     else if (errorCount) status = "partial";
-    if (!result.swaps.length && !errorCount) log.push("No new trading swaps found for this wallet.");
+    if (!result.swaps.length && !errorCount)
+      log.push("No new trading swaps found for this wallet.");
     log.push(`New swaps ${discovered}, duplicates skipped ${duplicates}.`);
   } catch (e) {
     status = "failed";

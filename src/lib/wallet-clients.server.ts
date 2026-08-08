@@ -50,10 +50,16 @@ function pricing(
   // Price is only derived when one side is a stablecoin — never invented.
   if (!amountIn || !amountOut) return { price: null, valueUsd: null };
   if (STABLES.has(tokenIn.toUpperCase())) {
-    return { price: Number((amountIn / amountOut).toFixed(8)), valueUsd: Number(amountIn.toFixed(2)) };
+    return {
+      price: Number((amountIn / amountOut).toFixed(8)),
+      valueUsd: Number(amountIn.toFixed(2)),
+    };
   }
   if (STABLES.has(tokenOut.toUpperCase())) {
-    return { price: Number((amountOut / amountIn).toFixed(8)), valueUsd: Number(amountOut.toFixed(2)) };
+    return {
+      price: Number((amountOut / amountIn).toFixed(8)),
+      valueUsd: Number(amountOut.toFixed(2)),
+    };
   }
   return { price: null, valueUsd: null };
 }
@@ -83,7 +89,11 @@ async function etherscan<T>(chainId: number, params: Record<string, string>, key
   return json.result;
 }
 
-async function discoverEvm(chain: ChainId, address: string, limit: number): Promise<DiscoveryResult> {
+async function discoverEvm(
+  chain: ChainId,
+  address: string,
+  limit: number,
+): Promise<DiscoveryResult> {
   const key = process.env["ETHERSCAN_API_KEY"];
   const errors: string[] = [];
   if (!key) {
@@ -148,7 +158,8 @@ async function discoverEvm(chain: ChainId, address: string, limit: number): Prom
 
     const pick = (arr: EtherscanTokenTx[]) => {
       const best = arr.reduce((a, b) =>
-        Number(b.value) / 10 ** Number(b.tokenDecimal) > Number(a.value) / 10 ** Number(a.tokenDecimal)
+        Number(b.value) / 10 ** Number(b.tokenDecimal) >
+        Number(a.value) / 10 ** Number(a.tokenDecimal)
           ? b
           : a,
       );
@@ -162,7 +173,8 @@ async function discoverEvm(chain: ChainId, address: string, limit: number): Prom
     const bought = pick(ins);
     if (sold.symbol === bought.symbol) continue; // wrap / rebase, not a trade
 
-    const stableIn = STABLES.has(sold.symbol.toUpperCase()) || sold.symbol.toUpperCase() === `W${native}`;
+    const stableIn =
+      STABLES.has(sold.symbol.toUpperCase()) || sold.symbol.toUpperCase() === `W${native}`;
     const direction: "long" | "short" = stableIn ? "long" : "short";
     const asset = direction === "long" ? bought.symbol : sold.symbol;
     const { price, valueUsd } = pricing(sold.symbol, sold.amount, bought.symbol, bought.amount);
@@ -304,7 +316,9 @@ async function discoverSolana(address: string, limit: number): Promise<Discovery
 
       swaps.push({
         txHash: sig.signature,
-        blockTime: new Date((sig.blockTime ?? tx.blockTime ?? Date.now() / 1000) * 1000).toISOString(),
+        blockTime: new Date(
+          (sig.blockTime ?? tx.blockTime ?? Date.now() / 1000) * 1000,
+        ).toISOString(),
         direction,
         tokenIn,
         tokenOut,
