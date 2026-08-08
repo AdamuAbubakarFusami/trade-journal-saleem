@@ -13,9 +13,8 @@ export type WalletSyncStats = {
   nativeBalance: number | null;
 };
 
-type Db = {
-  from: (t: string) => any;
-};
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type Db = { from: (t: string) => any };
 
 export async function syncWallet(
   db: Db,
