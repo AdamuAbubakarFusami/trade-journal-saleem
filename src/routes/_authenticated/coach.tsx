@@ -249,7 +249,7 @@ function Coach() {
   return (
     <AppShell title="AI Coach" description="Coaching grounded in your own journal data">
       <Tabs defaultValue="ask">
-        <TabsList className="mb-4 flex-wrap">
+        <TabsList className="mb-4 flex h-auto w-full flex-wrap justify-start gap-1">
           <TabsTrigger value="ask">Ask coach</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
           <TabsTrigger value="analyzers">Analyzers</TabsTrigger>
