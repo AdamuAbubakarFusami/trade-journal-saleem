@@ -328,8 +328,10 @@ function Journal() {
               })}
             </tbody>
           </table>
-        </div>
+          </div>
+        </>
       )}
+
 
       <AlertDialog open={!!deleteId} onOpenChange={(v) => !v && setDeleteId(null)}>
         <AlertDialogContent>
