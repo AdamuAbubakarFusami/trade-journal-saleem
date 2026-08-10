@@ -169,12 +169,86 @@ function Journal() {
           ))}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="surface-card p-14 text-center text-sm text-muted-foreground">
+        <div className="surface-card p-10 text-center text-sm text-muted-foreground sm:p-14">
           No trades match these filters.
         </div>
       ) : (
-        <div className="surface-card overflow-x-auto">
-          <table className="w-full min-w-[820px] text-sm">
+        <>
+          {/* Mobile: one readable card per trade instead of a squeezed table. */}
+          <ul className="space-y-3 md:hidden">
+            {filtered.map((t) => {
+              const pnl = Number(t.profit_loss);
+              return (
+                <li key={t.id} className="surface-card p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate font-medium">{t.asset}</p>
+                      <p className="num text-xs text-muted-foreground">
+                        {new Date(t.opened_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <p
+                      className={cn(
+                        "num shrink-0 text-right font-semibold",
+                        pnl >= 0 ? "text-success" : "text-destructive",
+                      )}
+                    >
+                      {money(pnl)}
+                    </p>
+                  </div>
+                  <div className="mt-3 flex flex-wrap items-center gap-1.5 text-xs">
+                    <Badge variant="outline" className="capitalize">
+                      {t.direction}
+                    </Badge>
+                    <Badge variant="outline">
+                      {t.rr_ratio ? `${Number(t.rr_ratio).toFixed(2)}R` : "— R"}
+                    </Badge>
+                    {t.strategy ? <Badge variant="outline">{t.strategy}</Badge> : null}
+                    {t.emotional_state ? (
+                      <Badge variant="outline" className="capitalize">
+                        {t.emotional_state}
+                      </Badge>
+                    ) : null}
+                  </div>
+                  <div className="mt-3 flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="min-h-11 flex-1 border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary"
+                      onClick={() => setAnalyzing(t)}
+                    >
+                      <Sparkles className="mr-1.5 h-4 w-4" /> Analyze with AI
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-11 w-11 shrink-0"
+                      aria-label={`Edit ${t.asset} trade`}
+                      onClick={() => {
+                        setEditing(t);
+                        setDialogOpen(true);
+                      }}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-11 w-11 shrink-0"
+                      aria-label={`Delete ${t.asset} trade`}
+                      onClick={() => setDeleteId(t.id)}
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="surface-card hidden overflow-x-auto md:block">
+            <table className="w-full min-w-[820px] text-sm">
+
             <thead className="border-b border-border text-left text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="px-4 py-3">Date</th>
