@@ -133,7 +133,7 @@ function BehaviorPage() {
         description="How often each behaviour appears in the trades you have logged."
       >
         {chart.length ? (
-          <div className="h-[360px]">
+          <div className="chart-lg">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chart} layout="vertical" margin={{ left: 40 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />

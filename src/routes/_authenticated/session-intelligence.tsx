@@ -130,7 +130,7 @@ function SessionIntelligencePage() {
 
       <div className="grid gap-6 xl:grid-cols-2">
         <Panel title="Hourly win rate" description="Win rate for each hour you have entered trades.">
-          <div className="h-[300px]">
+          <div className="chart-md">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={hourly.filter((h) => h.trades > 0)}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
@@ -153,7 +153,7 @@ function SessionIntelligencePage() {
         </Panel>
 
         <Panel title="Average RR by hour" description="Reward-to-risk achieved at each hour of the day.">
-          <div className="h-[300px]">
+          <div className="chart-md">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={hourly.filter((h) => h.trades > 0)}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
@@ -168,7 +168,7 @@ function SessionIntelligencePage() {
       </div>
 
       <Panel title="Weekday profitability" description="Net P/L by day of week.">
-        <div className="h-[280px]">
+        <div className="chart-md">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={weekday}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />

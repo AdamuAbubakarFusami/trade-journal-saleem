@@ -180,7 +180,7 @@ function DrawdownPage() {
       </Panel>
 
       <Panel title="Underwater curve" description="Every point below zero is capital yet to be recovered.">
-        <div className="h-[340px]">
+        <div className="chart-lg">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={dd.series}>
               <defs>
@@ -206,7 +206,7 @@ function DrawdownPage() {
 
       <div className="grid gap-6 xl:grid-cols-2">
         <Panel title="Drawdown percentage" description="Depth relative to the running peak.">
-          <div className="h-[280px]">
+          <div className="chart-md">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={dd.series}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
@@ -226,7 +226,7 @@ function DrawdownPage() {
         </Panel>
 
         <Panel title="Worst drawdown by month" description="Where your equity took the most damage.">
-          <div className="h-[280px]">
+          <div className="chart-md">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dd.monthly}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />

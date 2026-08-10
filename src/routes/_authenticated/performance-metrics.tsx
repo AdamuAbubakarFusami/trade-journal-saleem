@@ -114,7 +114,7 @@ function PerformanceMetricsPage() {
 
       <div className="grid gap-6 xl:grid-cols-2">
         <Panel title="Ratio comparison" description="Raw values of the eight core risk-adjusted ratios.">
-          <div className="h-[320px]">
+          <div className="chart-md">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chart} layout="vertical" margin={{ left: 30 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
@@ -140,7 +140,7 @@ function PerformanceMetricsPage() {
         </Panel>
 
         <Panel title="Quality profile" description="The same ratios normalised to a 0–100 quality scale.">
-          <div className="h-[320px]">
+          <div className="chart-md">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={radar} outerRadius="72%">
                 <PolarGrid stroke="var(--color-border)" />

@@ -98,7 +98,7 @@ function MarketIntelligencePage() {
       </Panel>
 
       <Panel title="Profit by market" description="Realised net P/L contributed by each market.">
-        <div className="h-[320px]">
+        <div className="chart-md">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={rows}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />

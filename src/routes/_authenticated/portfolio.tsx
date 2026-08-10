@@ -44,7 +44,7 @@ const COLORS = [
 function AllocationPie({ title, rows }: { title: string; rows: Allocation[] }) {
   return (
     <Panel title={title} description="Share of total exposure, derived from position size and entry price.">
-      <div className="h-[280px]">
+      <div className="chart-md">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie data={rows} dataKey="share" nameKey="name" innerRadius={55} outerRadius={95} paddingAngle={2}>

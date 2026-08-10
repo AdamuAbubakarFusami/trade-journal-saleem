@@ -193,7 +193,7 @@ function MonteCarloPage() {
       </Panel>
 
       <Panel title="Equity confidence bands" description="P5 / P25 / median / P75 / P95 envelope.">
-        <div className="h-[380px]">
+        <div className="chart-lg">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={mc.bands}>
               <defs>
@@ -224,7 +224,7 @@ function MonteCarloPage() {
       </Panel>
 
       <Panel title="Sample simulated paths" description="Twelve individual futures drawn from your own trade population.">
-        <div className="h-[320px]">
+        <div className="chart-md">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={mc.samples}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
@@ -254,7 +254,7 @@ function MonteCarloPage() {
       </Panel>
 
       <Panel title="Distribution of final outcomes" description="How the simulated ending balances cluster.">
-        <div className="h-[300px]">
+        <div className="chart-md">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={mc.distribution}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
