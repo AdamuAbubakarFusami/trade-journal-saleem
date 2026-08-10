@@ -125,7 +125,7 @@ function ProbabilityPage() {
       </Panel>
 
       <Panel title="Probability comparison" description="All percentage-based probabilities side by side.">
-        <div className="h-[320px]">
+        <div className="chart-md">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chart} layout="vertical" margin={{ left: 60 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />

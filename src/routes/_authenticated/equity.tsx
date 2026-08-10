@@ -160,7 +160,7 @@ function EquityPage() {
       </Panel>
 
       <Panel title="Equity curve" description="Raw balance versus its 10-trade smoothed trend and running peak.">
-        <div className="h-[380px]">
+        <div className="chart-lg">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={series.points}>
               <defs>
@@ -194,7 +194,7 @@ function EquityPage() {
 
       <div className="grid gap-6 xl:grid-cols-2">
         <Panel title="Rolling 10-trade P/L" description="Momentum of your recent process.">
-          <div className="h-[280px]">
+          <div className="chart-md">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={series.points}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
@@ -215,7 +215,7 @@ function EquityPage() {
         </Panel>
 
         <Panel title="Growth percentage" description="Cumulative growth against estimated capital.">
-          <div className="h-[280px]">
+          <div className="chart-md">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={series.points}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
@@ -237,7 +237,7 @@ function EquityPage() {
 
       <div className="grid gap-6 xl:grid-cols-2">
         <Panel title="Monthly equity" description="Period P/L and the running balance it produced.">
-          <div className="h-[280px]">
+          <div className="chart-md">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={series.monthly}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
@@ -258,7 +258,7 @@ function EquityPage() {
         </Panel>
 
         <Panel title="Yearly equity" description="Long-term compounding view.">
-          <div className="h-[280px]">
+          <div className="chart-md">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={series.yearly}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />

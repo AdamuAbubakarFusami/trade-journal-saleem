@@ -41,7 +41,7 @@ const tooltipStyle = {
 
 function CountChart({ data, color }: { data: { label: string; count: number }[]; color: string }) {
   return (
-    <div className="h-[260px]">
+    <div className="chart-sm">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
@@ -57,7 +57,7 @@ function CountChart({ data, color }: { data: { label: string; count: number }[];
 
 function PnlChart({ data }: { data: { name: string; pnl: number }[] }) {
   return (
-    <div className="h-[260px]">
+    <div className="chart-sm">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />

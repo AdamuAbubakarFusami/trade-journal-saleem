@@ -402,7 +402,7 @@ function WalletTrackingPage() {
         )}
 
         <Tabs defaultValue="pending">
-          <TabsList>
+          <TabsList className="flex w-full flex-wrap justify-start gap-1 h-auto">
             <TabsTrigger value="pending">Discovered swaps ({pending.length})</TabsTrigger>
             <TabsTrigger value="all">All activity</TabsTrigger>
             <TabsTrigger value="history">Sync history</TabsTrigger>

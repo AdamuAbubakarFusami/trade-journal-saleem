@@ -181,14 +181,14 @@ export function TradeDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="safe-b flex max-h-[92dvh] flex-col gap-4 overflow-hidden p-0 sm:max-w-2xl">
+        <DialogHeader className="shrink-0 px-4 pt-5 text-left sm:px-6">
           <DialogTitle>{trade ? "Edit trade" : "Log a trade"}</DialogTitle>
           <DialogDescription>Capture the execution and the mindset behind it.</DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="execution">
-          <TabsList className="grid w-full grid-cols-3">
+        <Tabs defaultValue="execution" className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-4 pb-2 sm:px-6">
+          <TabsList className="grid w-full grid-cols-3 text-xs sm:text-sm">
             <TabsTrigger value="execution">Execution</TabsTrigger>
             <TabsTrigger value="context">Context</TabsTrigger>
             <TabsTrigger value="psychology">Psychology</TabsTrigger>
@@ -374,11 +374,15 @@ export function TradeDialog({
           </TabsContent>
         </Tabs>
 
-        <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>
+        <DialogFooter className="shrink-0 gap-2 border-t border-border bg-background px-4 py-3 sm:px-6">
+          <Button variant="ghost" className="w-full sm:w-auto" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={() => mutation.mutate()} disabled={mutation.isPending}>
+          <Button
+            className="w-full sm:w-auto"
+            onClick={() => mutation.mutate()}
+            disabled={mutation.isPending}
+          >
             {trade ? "Save changes" : "Log trade"}
           </Button>
         </DialogFooter>

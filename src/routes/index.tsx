@@ -59,9 +59,9 @@ const FEATURES = [
 
 function Landing() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 md:px-8">
+        <div className="safe-x mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 md:px-8 md:py-4">
           <div className="flex items-center gap-2">
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground">
               <LineChart className="h-4 w-4" />
@@ -76,22 +76,22 @@ function Landing() {
 
       <section className="relative overflow-hidden border-b border-border">
         <div className="grid-backdrop pointer-events-none absolute inset-0 opacity-60" />
-        <div className="relative mx-auto max-w-3xl px-4 py-24 text-center md:px-8 md:py-32">
+        <div className="relative mx-auto max-w-3xl px-4 py-16 text-center sm:py-24 md:px-8 md:py-32">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-xs text-muted-foreground">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
             Built for Forex, Crypto, Stocks, Options & DEX
           </span>
-          <h1 className="mt-6 text-4xl font-semibold leading-[1.05] md:text-6xl">
+          <h1 className="mt-6 text-3xl font-semibold leading-[1.08] sm:text-4xl md:text-6xl">
             Your edge lives in the
             <br />
             <span className="text-gradient">trades you review</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">
+          <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
             SaleemJournal turns your trade history into performance insight — statistics,
             psychology patterns and repeated mistakes, all in one clean workspace.
           </p>
-          <div className="mt-9 flex justify-center">
-            <Button asChild size="lg">
+          <div className="mt-8 flex justify-center">
+            <Button asChild size="lg" className="w-full sm:w-auto">
               <Link to="/auth">Create your free journal</Link>
             </Button>
           </div>
@@ -102,10 +102,10 @@ function Landing() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-20 md:px-8">
+      <section className="mx-auto max-w-6xl px-4 py-14 sm:py-20 md:px-8">
         <div className="grid gap-4 md:grid-cols-2">
           {FEATURES.map((f) => (
-            <article key={f.title} className="surface-card p-6">
+            <article key={f.title} className="surface-card p-5 sm:p-6">
               <f.icon className="h-5 w-5 text-primary" />
               <h2 className="mt-4 text-lg font-semibold">{f.title}</h2>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.body}</p>

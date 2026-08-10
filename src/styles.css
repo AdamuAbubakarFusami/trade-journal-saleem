@@ -144,6 +144,13 @@
   html {
     color-scheme: dark;
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   body {
@@ -153,14 +160,52 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* Long assets, hashes and AI paragraphs must never widen the viewport. */
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  span,
+  td,
+  th,
+  li {
+    overflow-wrap: anywhere;
+  }
+
   h1,
   h2,
   h3,
   h4 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
+    text-wrap: balance;
   }
 }
+
+/* Respect iOS/Android browser chrome and notches. */
+@utility safe-b {
+  padding-bottom: max(env(safe-area-inset-bottom), 0px);
+}
+
+@utility safe-x {
+  padding-left: max(env(safe-area-inset-left), 0px);
+  padding-right: max(env(safe-area-inset-right), 0px);
+}
+
+/* Responsive chart shells: shorter on phones, full height from `sm` upward. */
+@utility chart-sm {
+  height: clamp(200px, 46vw, 260px);
+}
+
+@utility chart-md {
+  height: clamp(220px, 52vw, 320px);
+}
+
+@utility chart-lg {
+  height: clamp(240px, 60vw, 380px);
+}
+
 
 @utility surface-card {
   background-image: var(--gradient-surface);

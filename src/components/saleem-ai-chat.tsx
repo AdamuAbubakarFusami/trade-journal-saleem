@@ -96,9 +96,9 @@ export function SaleemAiChat() {
   }
 
   return (
-    <div className="no-print fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+    <div className="no-print safe-b fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 sm:bottom-5 sm:right-5">
       {open && (
-        <div className="ai-surface flex h-[min(560px,75vh)] w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className="ai-surface flex h-[min(560px,70dvh)] w-[calc(100vw-2rem)] max-w-[380px] flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
           <header className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">
             <div className="flex items-center gap-2">
               <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary/15 text-primary">
@@ -198,7 +198,7 @@ export function SaleemAiChat() {
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label="Open Saleem AI assistant"
-        className="glow-ring flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-transform duration-200 hover:scale-105"
+        className="glow-ring flex min-h-12 min-w-12 items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-transform duration-200 hover:scale-105"
       >
         <BrainCircuit className="h-5 w-5" />
         <span className="hidden sm:inline">Saleem AI</span>

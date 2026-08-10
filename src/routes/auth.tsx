@@ -109,7 +109,7 @@ function AuthPage() {
   }
 
   return (
-    <div className="grid min-h-screen lg:grid-cols-2">
+    <div className="grid min-h-dvh lg:grid-cols-2">
       <div className="relative hidden flex-col justify-between overflow-hidden border-r border-border bg-sidebar p-12 lg:flex">
         <div className="grid-backdrop pointer-events-none absolute inset-0 opacity-70" />
         <Link to="/" className="relative flex items-center gap-2">
@@ -134,7 +134,7 @@ function AuthPage() {
         </p>
       </div>
 
-      <div className="flex items-center justify-center px-4 py-16">
+      <div className="safe-x flex items-center justify-center px-4 py-10 sm:py-16">
         <div className="w-full max-w-sm">
           <Link
             to="/"

@@ -154,7 +154,7 @@ function RiskOfRuinPage() {
         title="Survival curve"
         description="Share of resampled futures still tradeable after N trades."
       >
-        <div className="h-[300px]">
+        <div className="chart-md">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={survivalCurve}>
               <defs>
@@ -184,7 +184,7 @@ function RiskOfRuinPage() {
         title="Capital decay chart"
         description="Median, 5th and 95th percentile capital paths from resampling your own trades."
       >
-        <div className="h-[320px]">
+        <div className="chart-md">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={decayCurve}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />

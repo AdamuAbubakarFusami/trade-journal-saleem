@@ -32,7 +32,7 @@ import {
   TrendingUp,
   X,
 } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { SaleemAiChat } from "@/components/saleem-ai-chat";
 import { supabase } from "@/integrations/supabase/client";
@@ -95,6 +95,16 @@ export function AppShell({
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+
+  // Lock body scroll while the mobile drawer is open.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
   async function signOut() {
     await queryClient.cancelQueries();
@@ -159,7 +169,7 @@ export function AppShell({
 
 
   return (
-    <div className="flex min-h-screen w-full bg-background">
+    <div className="flex min-h-dvh w-full overflow-x-hidden bg-background">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-sidebar-border bg-sidebar p-4 lg:flex">
         <Brand />
         <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-primary">
@@ -172,17 +182,26 @@ export function AppShell({
       </aside>
 
       {open && (
-        <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="absolute inset-0 bg-background/80" onClick={() => setOpen(false)} />
-          <aside className="absolute inset-y-0 left-0 flex w-64 flex-col border-r border-sidebar-border bg-sidebar p-4">
-            <div className="flex items-center justify-between">
+        <div className="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true" aria-label="Navigation">
+          <div
+            className="absolute inset-0 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200"
+            onClick={() => setOpen(false)}
+          />
+          <aside className="safe-b absolute inset-y-0 left-0 flex w-[min(17rem,85vw)] flex-col border-r border-sidebar-border bg-sidebar p-4 animate-in slide-in-from-left duration-200">
+            <div className="flex items-center justify-between gap-2">
               <Brand />
-              <Button size="icon" variant="ghost" onClick={() => setOpen(false)}>
-                <X className="h-4 w-4" />
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-11 w-11 shrink-0"
+                aria-label="Close navigation"
+                onClick={() => setOpen(false)}
+              >
+                <X className="h-5 w-5" />
               </Button>
             </div>
-            <div className="mt-8 flex-1 overflow-y-auto">{nav}</div>
-            <Button variant="ghost" className="justify-start gap-3" onClick={signOut}>
+            <div className="mt-6 flex-1 overflow-y-auto overscroll-contain">{nav}</div>
+            <Button variant="ghost" className="mt-2 justify-start gap-3" onClick={signOut}>
               <LogOut className="h-4 w-4" /> Sign out
             </Button>
           </aside>
@@ -190,29 +209,38 @@ export function AppShell({
       )}
 
       <div className="flex min-w-0 flex-1 flex-col lg:pl-60">
-        <header className="sticky top-0 z-20 flex flex-wrap items-center gap-4 border-b border-border bg-background/85 px-4 py-4 backdrop-blur md:px-8">
+        <header className="safe-x sticky top-0 z-20 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-3 border-b border-border bg-background/85 px-3 py-3 backdrop-blur sm:px-4 md:px-8 md:py-4 lg:grid-cols-[minmax(0,1fr)_auto]">
           <Button
             size="icon"
             variant="ghost"
-            className="lg:hidden"
+            className="h-11 w-11 shrink-0 lg:hidden"
             onClick={() => setOpen(true)}
             aria-label="Open navigation"
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <div className="min-w-0 flex-1">
-            <h1 className="truncate text-lg font-semibold md:text-xl">{title}</h1>
-            {description && <p className="truncate text-sm text-muted-foreground">{description}</p>}
+          <div className="min-w-0">
+            <h1 className="truncate text-base font-semibold sm:text-lg md:text-xl">{title}</h1>
+            {description && (
+              <p className="truncate text-xs text-muted-foreground sm:text-sm">{description}</p>
+            )}
           </div>
-          {actions}
+          {actions ? (
+            <div className="col-span-2 flex min-w-0 flex-wrap items-center gap-2 lg:col-span-1">
+              {actions}
+            </div>
+          ) : null}
         </header>
-        <main className="flex-1 px-4 py-6 md:px-8 md:py-8">{children}</main>
+        <main className="safe-x min-w-0 flex-1 px-3 pb-24 pt-5 sm:px-4 md:px-8 md:py-8 lg:pb-8">
+          {children}
+        </main>
       </div>
 
       <SaleemAiChat />
     </div>
   );
 }
+
 
 export function Brand() {
   return (

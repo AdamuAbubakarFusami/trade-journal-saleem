@@ -143,7 +143,7 @@ function PositionSizingPage() {
         title="Recommended vs actual size"
         description="Recommended risk per trade from each model against what your journal shows you actually risk."
       >
-        <div className="h-[340px]">
+        <div className="chart-lg">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={comparison} margin={{ bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />

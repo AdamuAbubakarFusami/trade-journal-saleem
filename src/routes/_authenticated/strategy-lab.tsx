@@ -175,7 +175,7 @@ function StrategyLabPage() {
       </Panel>
 
       <Panel title="Net P/L by strategy" description="Realised profit contributed by each setup.">
-        <div className="h-[320px]">
+        <div className="chart-md">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={rows.map((r) => ({ name: r.name, pnl: r.netPnl }))}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />

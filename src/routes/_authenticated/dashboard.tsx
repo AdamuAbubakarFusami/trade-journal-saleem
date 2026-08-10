@@ -46,11 +46,11 @@ function Stat({
   hint?: string;
 }) {
   return (
-    <div className="surface-card p-5">
-      <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
+    <div className="surface-card p-4 sm:p-5">
+      <p className="text-[11px] uppercase tracking-wide text-muted-foreground sm:text-xs">{label}</p>
       <p
         className={cn(
-          "num mt-2 text-2xl font-semibold",
+          "num mt-2 text-xl font-semibold sm:text-2xl",
           tone === "up" && "text-success",
           tone === "down" && "text-destructive",
         )}
@@ -215,7 +215,7 @@ function Dashboard() {
             </div>
           </section>
 
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
             <Stat label="Total trades" value={String(stats.total)} />
             <Stat label="Win rate" value={pct(stats.winRate)} tone="up" />
             <Stat label="Loss rate" value={pct(stats.lossRate)} tone="down" />
@@ -251,7 +251,7 @@ function Dashboard() {
           <div className="grid gap-4 lg:grid-cols-3">
             <div className="surface-card p-5 lg:col-span-2">
               <h2 className="text-sm font-semibold">Equity curve</h2>
-              <div className="mt-4 h-64">
+              <div className="mt-4 chart-md">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={stats.equityCurve}>
                     <defs>

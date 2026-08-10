@@ -44,7 +44,7 @@ function ResetPassword() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
+    <div className="flex min-h-dvh items-center justify-center px-4">
       <div className="surface-card w-full max-w-sm p-8">
         <h1 className="text-xl font-semibold">Set a new password</h1>
         <p className="mt-2 text-sm text-muted-foreground">
