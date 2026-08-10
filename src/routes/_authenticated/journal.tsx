@@ -96,11 +96,17 @@ function Journal() {
       title="Journal"
       description="Search, review and refine every trade you have taken"
       actions={
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={exportCsv} disabled={!filtered.length}>
+        <div className="flex w-full gap-2 sm:w-auto">
+          <Button
+            variant="outline"
+            className="flex-1 sm:flex-none"
+            onClick={exportCsv}
+            disabled={!filtered.length}
+          >
             <Download className="mr-2 h-4 w-4" /> Export
           </Button>
           <Button
+            className="flex-1 sm:flex-none"
             onClick={() => {
               setEditing(null);
               setDialogOpen(true);
@@ -110,6 +116,7 @@ function Journal() {
           </Button>
         </div>
       }
+
     >
       <TradeDialog open={dialogOpen} onOpenChange={setDialogOpen} trade={editing} />
       <TradeAnalysisDialog
