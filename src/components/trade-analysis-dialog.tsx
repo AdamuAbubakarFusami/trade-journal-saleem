@@ -127,7 +127,7 @@ export function TradeAnalysisDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="h-[94vh] max-w-[min(1180px,96vw)] overflow-y-auto sm:max-w-[min(1180px,96vw)]">
+      <DialogContent className="h-[94dvh] w-[calc(100vw-1rem)] max-w-[min(1180px,96vw)] overflow-y-auto overscroll-contain p-4 sm:w-full sm:max-w-[min(1180px,96vw)] sm:p-6">
         <DialogHeader>
           <DialogTitle className="flex flex-wrap items-center gap-2">
             <Sparkles className="h-4 w-4 text-primary" />
