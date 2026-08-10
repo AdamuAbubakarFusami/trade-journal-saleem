@@ -32,7 +32,7 @@ import {
   TrendingUp,
   X,
 } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { SaleemAiChat } from "@/components/saleem-ai-chat";
 import { supabase } from "@/integrations/supabase/client";
@@ -95,6 +95,16 @@ export function AppShell({
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+
+  // Lock body scroll while the mobile drawer is open.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
   async function signOut() {
     await queryClient.cancelQueries();
